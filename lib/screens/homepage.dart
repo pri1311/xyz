@@ -12,13 +12,7 @@ class _HomepageState extends State<Homepage> {
     "channel",
     "some other channel",
   ];
-  final List<int> colorCodes = <int>[600, 500, 100];
   int _currentIndex = 0;
-  List<Widget> tabPages = [
-    Screen1(),
-    Screen2(),
-    Screen3(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -132,28 +126,6 @@ class Screen1 extends StatelessWidget {
     return Container(
       child: Center(
         child: Text("data"),
-      ),
-    );
-  }
-}
-
-class Screen2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("hello1"),
-      ),
-    );
-  }
-}
-
-class Screen3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("hello2"),
       ),
     );
   }
