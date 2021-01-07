@@ -45,4 +45,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-screens/bottomNavBar.dart
+/screens/bottomNavBar.dart

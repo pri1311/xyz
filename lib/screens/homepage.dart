@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xyz/screens/channelList.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:xyz/screens/profile.dart';
 
 enum _SelectedTab { home, search, profile }
 
@@ -27,91 +28,97 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFF121212),
-        body: Column(
-          children: [
-            _selectedTab == _SelectedTab.home
-                ? Expanded(
-                    child: channelList(),
-                  )
-                : _selectedTab == _SelectedTab.profile
-                    ? Expanded(
-                        child: Screen1(),
-                      )
-                    : Expanded(
-                        child: Screen2(),
+      backgroundColor: Color(0xFF121212),
+      body: Column(
+        children: [
+          _selectedTab == _SelectedTab.home
+              ? Expanded(
+                  child: channelList(),
+                )
+              : _selectedTab == _SelectedTab.profile
+                  ? Expanded(
+                      child: ProfileScreen(_handleIndexChanged),
+                    )
+                  : Expanded(
+                      child: Screen1(_handleIndexChanged),
+                    ),
+          Container(
+              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: Center(
+                child: SalomonBottomBar(
+                  currentIndex: _SelectedTab.values.indexOf(_selectedTab),
+                  onTap: _handleIndexChanged,
+                  items: [
+                    /// Home
+                    SalomonBottomBarItem(
+                      icon: Icon(
+                        Icons.home,
+                        color: Colors.white.withOpacity(0.50),
+                        size: 30,
                       ),
-            Container(
-                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                child: Center(
-                  child: SalomonBottomBar(
-                    currentIndex: _SelectedTab.values.indexOf(_selectedTab),
-                    onTap: _handleIndexChanged,
-                    items: [
-                      /// Home
-                      SalomonBottomBarItem(
-                        icon: Icon(
-                          Icons.home,
-                          color: Colors.white.withOpacity(0.50),
-                          size: 30,
-                        ),
-                        title: Text("Home"),
-                        selectedColor: Colors.white,
-                      ),
+                      title: Text("Home"),
+                      selectedColor: Color(0xFFDE6F70),
+                    ),
 
-                      /// Search
-                      SalomonBottomBarItem(
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.white.withOpacity(0.60),
-                          size: 30,
-                        ),
-                        title: Text("Search"),
-                        selectedColor: Colors.white,
+                    /// Search
+                    SalomonBottomBarItem(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white.withOpacity(0.60),
+                        size: 30,
                       ),
+                      title: Text("Search"),
+                      selectedColor: Color(0xFFDE6F70),
+                    ),
 
-                      /// Profile
-                      SalomonBottomBarItem(
-                        icon: Icon(
-                          Icons.person,
-                          color: Colors.white.withOpacity(0.50),
-                          size: 30,
-                        ),
-                        title: Text("Profile"),
-                        selectedColor: Colors.white,
+                    /// Profile
+                    SalomonBottomBarItem(
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.white.withOpacity(0.50),
+                        size: 30,
                       ),
-                    ],
-                  ),
-                ))
-          ],
-        ));
-  }
-}
-
-class Screen1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(
-          "Profile",
-          style: TextStyle(color: Colors.white),
-        ),
+                      title: Text("Profile"),
+                      selectedColor: Color(0xFFDE6F70),
+                    ),
+                  ],
+                ),
+              ))
+        ],
       ),
     );
   }
 }
 
-class Screen2 extends StatelessWidget {
+class Screen1 extends StatelessWidget {
+  final Function _handleIndexChange;
+  Screen1(this._handleIndexChange);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text(
-          "Search",
-          style: TextStyle(color: Colors.white),
+          child: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: Column(
+          children: [
+            RaisedButton(
+              color: Colors.black,
+              child: Text(
+                "Go back!",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () => _handleIndexChange(0),
+            ),
+            Text(
+              "Search",
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
         ),
-      ),
+      )),
     );
   }
 }

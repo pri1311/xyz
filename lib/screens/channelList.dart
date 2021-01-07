@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:xyz/screens/widgets.dart';
 
+// ignore: camel_case_types
 class channelList extends StatefulWidget {
   @override
   _channelListState createState() => _channelListState();
 }
 
+// ignore: camel_case_types
 class _channelListState extends State<channelList> {
   List<String> availableChannels = [
     "general",
     "channel",
     "some other channel",
+  ];
+
+  var workspaces = [
+    {
+      'id': 1,
+      'name': "Workspace1",
+      'channels': [
+        "general",
+        "channel",
+        "some other channel",
+      ],
+    },
+    {
+      'id': 2,
+      'name': "Workspace2",
+      'channels': [
+        "general",
+        "channel",
+      ],
+    }
   ];
 
   @override
@@ -20,14 +42,15 @@ class _channelListState extends State<channelList> {
         child: Row(
           children: [
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Container(
                 height: double.infinity,
                 width: 80,
                 decoration: BoxDecoration(
-                    color: Color(0xFF292929),
-                    borderRadius:
-                        BorderRadius.only(topRight: Radius.circular(20.0))),
+                  color: Color(0xFF292929),
+                  borderRadius:
+                      BorderRadius.only(topRight: Radius.circular(20.0)),
+                ),
                 child: Expanded(
                   child: ListView(
                     children: [
@@ -42,10 +65,11 @@ class _channelListState extends State<channelList> {
               ),
             ),
             Expanded(
-              flex: 9,
+              flex: 4,
               child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 height: double.infinity,
-                width: 330.0,
+                //width: 330.0,
                 decoration: BoxDecoration(
                   color: Color(0xFF121212),
                 ),
@@ -55,37 +79,47 @@ class _channelListState extends State<channelList> {
                       padding: EdgeInsets.only(top: 20.0),
                     ),
                     Expanded(
-                        child: ListView.separated(
-                      padding: const EdgeInsets.all(8.0),
-                      itemCount: availableChannels.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
+                      child: ListView.separated(
+                        padding: const EdgeInsets.all(8.0),
+                        itemCount: availableChannels.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return InkWell(
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Screen1(),
-                                  ));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Screen1(),
+                                ),
+                              );
                             },
                             child: Material(
                               color: Color(0xFF292929).withOpacity(0.70),
                               //borderRadius: BorderRadius.circular(10.0),
                               shadowColor: Color(0xFF121212),
-                              elevation: 10,
+                              elevation: 15,
                               child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1.0,
+                                    color: const Color(0xFF121212),
+                                  ),
+                                ),
                                 padding: EdgeInsets.all(10.0),
                                 child: Text(
                                   '# ${availableChannels[index]}',
                                   style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.white.withOpacity(0.50)),
+                                    fontSize: 16.0,
+                                    color: Colors.white.withOpacity(0.50),
+                                  ),
                                 ),
                               ),
-                            ));
-                      },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
-                    ))
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                      ),
+                    )
                   ],
                 ),
               ),

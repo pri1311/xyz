@@ -6,7 +6,11 @@ class Workspacebuttons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: () {
+        print(1);
+      },
+      child: Container(
         margin: EdgeInsets.only(
           left: 0.0,
           top: 20.0,
@@ -14,9 +18,13 @@ class Workspacebuttons extends StatelessWidget {
         height: 50.0,
         width: 50.0,
         decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: new DecorationImage(
-                fit: BoxFit.contain,
-                image: new AssetImage(location ?? 'assets/images/ws1.jpg'))));
+          shape: BoxShape.circle,
+          image: new DecorationImage(
+            fit: BoxFit.contain,
+            image: new AssetImage(location ?? 'assets/images/ws1.jpg'),
+          ),
+        ),
+      ),
+    );
   }
 }
