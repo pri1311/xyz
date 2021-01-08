@@ -79,6 +79,8 @@ class channelPage extends StatelessWidget {
                                 name: messageData[index]['name'],
                                 image: messageData[index]['imagepath'],
                                 message: messageData[index]['message'],
+                                imageFilePath: messageData[index]
+                                    ['imageMessagePath'],
                               ),
                       );
                     },

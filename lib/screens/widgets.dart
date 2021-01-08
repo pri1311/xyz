@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_4.dart';
+import 'package:like_button/like_button.dart';
 
 class Workspacebuttons extends StatelessWidget {
   final String location;
@@ -66,6 +66,7 @@ class messageThread extends StatelessWidget {
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                 width: width * 0.75,
@@ -94,10 +95,58 @@ class messageThread extends StatelessWidget {
                                 fontSize: 15,
                               ),
                             ),
+                            Row(
+                              children: [
+                                LikeButton(
+                                  size: 30,
+                                ),
+                                LikeButton(
+                                  size: 30,
+                                  circleColor: CircleColor(
+                                      start: Color(0xffef7070).withOpacity(0),
+                                      end: Color(0xff121212).withOpacity(0)),
+                                  bubblesColor: BubblesColor(
+                                    dotPrimaryColor:
+                                        Color(0xffef7070).withOpacity(0),
+                                    dotSecondaryColor:
+                                        Color(0xffef7070).withOpacity(0),
+                                  ),
+                                  likeBuilder: (bool isLiked) {
+                                    return Icon(
+                                      Icons.celebration,
+                                      color: isLiked
+                                          ? Color(0xFFEF7070)
+                                          : Colors.grey,
+                                      size: 30,
+                                    );
+                                  },
+                                  likeCount: 665,
+                                  countBuilder:
+                                      (int count, bool isLiked, String text) {
+                                    var color = isLiked
+                                        ? Color(0xFFEF7070)
+                                        : Colors.grey;
+                                    Widget result;
+                                    if (count == 0) {
+                                      result = Text(
+                                        "love",
+                                        style: TextStyle(color: color),
+                                      );
+                                    } else
+                                      result = Text(
+                                        text,
+                                        style: TextStyle(color: color),
+                                      );
+                                    return result;
+                                  },
+                                ),
+                              ],
+                            ),
                           ],
                         )
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               name,
@@ -121,7 +170,54 @@ class messageThread extends StatelessWidget {
                               child: Image(
                                 image: AssetImage(imageFilePath),
                               ),
-                            )
+                            ),
+                            Row(
+                              children: [
+                                LikeButton(
+                                  size: 30,
+                                ),
+                                LikeButton(
+                                  size: 30,
+                                  circleColor: CircleColor(
+                                      start: Color(0xffef7070).withOpacity(0),
+                                      end: Color(0xff121212).withOpacity(0)),
+                                  bubblesColor: BubblesColor(
+                                    dotPrimaryColor:
+                                        Color(0xffef7070).withOpacity(0),
+                                    dotSecondaryColor:
+                                        Color(0xffef7070).withOpacity(0),
+                                  ),
+                                  likeBuilder: (bool isLiked) {
+                                    return Icon(
+                                      Icons.celebration,
+                                      color: isLiked
+                                          ? Color(0xFFEF7070)
+                                          : Colors.grey,
+                                      size: 30,
+                                    );
+                                  },
+                                  likeCount: 665,
+                                  countBuilder:
+                                      (int count, bool isLiked, String text) {
+                                    var color = isLiked
+                                        ? Color(0xFFEF7070)
+                                        : Colors.grey;
+                                    Widget result;
+                                    if (count == 0) {
+                                      result = Text(
+                                        "love",
+                                        style: TextStyle(color: color),
+                                      );
+                                    } else
+                                      result = Text(
+                                        text,
+                                        style: TextStyle(color: color),
+                                      );
+                                    return result;
+                                  },
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                 ),
