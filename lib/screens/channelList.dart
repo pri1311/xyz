@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:xyz/screens/appDrawer.dart';
+import 'package:xyz/screens/channelPage.dart';
 import 'package:xyz/screens/widgets.dart';
 
 // ignore: camel_case_types
@@ -34,6 +36,19 @@ class _channelListState extends State<channelList> {
       ],
     }
   ];
+  AppBar appBar = AppBar(
+    backgroundColor: Color(0xFF292929),
+    title: Text('#general'),
+    leading: Builder(
+      builder: (BuildContext appBarContext) {
+        return IconButton(
+            onPressed: () {
+              AppDrawer.of(appBarContext).toggle();
+            },
+            icon: Icon(Icons.menu));
+      },
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +93,23 @@ class _channelListState extends State<channelList> {
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),
                     ),
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        'Workspace name',
+                        style: TextStyle(
+                          color: Color(0xFFFFFFFF).withOpacity(0.8),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Expanded(
                       child: ListView.separated(
                         padding: const EdgeInsets.all(8.0),
@@ -88,7 +120,9 @@ class _channelListState extends State<channelList> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Screen1(),
+                                  builder: (context) => AppDrawer(
+                                    child: channelPage(appBar),
+                                  ),
                                 ),
                               );
                             },
@@ -109,7 +143,7 @@ class _channelListState extends State<channelList> {
                                   '# ${availableChannels[index]}',
                                   style: TextStyle(
                                     fontSize: 16.0,
-                                    color: Colors.white.withOpacity(0.50),
+                                    color: Colors.white.withOpacity(0.60),
                                   ),
                                 ),
                               ),
