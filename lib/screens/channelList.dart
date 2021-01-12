@@ -136,7 +136,7 @@ class _channelListState extends State<channelList> {
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
                               child: Material(
-                                color: Color(0xFF292929).withOpacity(0.70),
+                                color: Color(0xFF121212).withOpacity(0.70),
                                 //borderRadius: BorderRadius.circular(10.0),
                                 shadowColor: Color(0xFF121212),
                                 elevation: 15,
@@ -179,7 +179,7 @@ class _channelListState extends State<channelList> {
                               );
                             },
                             child: Material(
-                              color: Color(0xFF292929).withOpacity(0.70),
+                              color: Color(0xFF121212).withOpacity(0.70),
                               //borderRadius: BorderRadius.circular(10.0),
                               shadowColor: Color(0xFF121212),
                               elevation: 15,
