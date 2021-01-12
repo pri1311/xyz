@@ -128,6 +128,40 @@ class _channelListState extends State<channelList> {
                     SizedBox(
                       height: 15,
                     ),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: InkWell(
+                              child: Material(
+                                color: Color(0xFF292929).withOpacity(0.70),
+                                //borderRadius: BorderRadius.circular(10.0),
+                                shadowColor: Color(0xFF121212),
+                                elevation: 15,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1.0,
+                                      color: const Color(0xFF121212),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    'Create new channel!',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.white.withOpacity(0.60),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     Expanded(
                       child: ListView.separated(
                         padding: const EdgeInsets.all(8.0),
@@ -171,7 +205,7 @@ class _channelListState extends State<channelList> {
                         separatorBuilder: (BuildContext context, int index) =>
                             const Divider(),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
