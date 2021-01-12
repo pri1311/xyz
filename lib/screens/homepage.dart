@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xyz/screens/channelList.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:xyz/screens/profile.dart';
+import 'package:xyz/screens/searchPage.dart';
 
 enum _SelectedTab { home, search, profile }
 
@@ -27,9 +28,8 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF121212),
-      body: Column(
+    return SafeArea(
+      child: Column(
         children: [
           _selectedTab == _SelectedTab.home
               ? Expanded(
@@ -40,7 +40,7 @@ class _HomepageState extends State<Homepage> {
                       child: ProfileScreen(_handleIndexChanged),
                     )
                   : Expanded(
-                      child: Screen1(_handleIndexChanged),
+                      child: SearchPage(),
                     ),
           Container(
               padding: EdgeInsets.fromLTRB(30, 0, 30, 0),

@@ -52,8 +52,8 @@ class _channelListState extends State<channelList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SafeArea(
+    return Scaffold(
+      body: SafeArea(
         child: Row(
           children: [
             Expanded(
