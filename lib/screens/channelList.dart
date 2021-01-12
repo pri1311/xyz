@@ -133,7 +133,7 @@ class _channelListState extends State<channelList> {
                         Expanded(
                           flex: 1,
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: InkWell(
                               child: Material(
                                 color: Color(0xFF292929).withOpacity(0.70),
