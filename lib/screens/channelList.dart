@@ -53,6 +53,14 @@ class _channelListState extends State<channelList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('XYZ'),
+        leading: Container(
+          padding: EdgeInsets.all(10),
+          child: Image.asset('assets/images/logo.png'),
+        ),
+        backgroundColor: Color(0xFF121212),
+      ),
       backgroundColor: Color(0xFF121212),
       body: SafeArea(
         child: Row(
@@ -108,9 +116,6 @@ class _channelListState extends State<channelList> {
                 ),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                    ),
                     Container(
                       margin: EdgeInsets.all(8),
                       alignment: Alignment.topLeft,
@@ -161,6 +166,9 @@ class _channelListState extends State<channelList> {
                           ),
                         ),
                       ],
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Expanded(
                       child: ListView.separated(
