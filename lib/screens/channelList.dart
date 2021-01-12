@@ -53,6 +53,7 @@ class _channelListState extends State<channelList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF121212),
       body: SafeArea(
         child: Row(
           children: [
@@ -63,8 +64,9 @@ class _channelListState extends State<channelList> {
                 width: 80,
                 decoration: BoxDecoration(
                   color: Color(0xFF292929),
-                  borderRadius:
-                      BorderRadius.only(topRight: Radius.circular(20.0)),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20.0),
+                  ),
                 ),
                 child: Expanded(
                   child: ListView(
@@ -74,6 +76,22 @@ class _channelListState extends State<channelList> {
                       ),
                       Workspacebuttons(),
                       Workspacebuttons(),
+                      Container(
+                        height: 60,
+                        margin: EdgeInsets.only(top: 20),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFF121212).withOpacity(0.3),
+                        ),
+                        child: IconButton(
+                          onPressed: null,
+                          icon: Icon(
+                            Icons.add,
+                            color: Colors.white.withOpacity(0.6),
+                            size: 30,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

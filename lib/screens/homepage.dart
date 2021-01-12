@@ -43,9 +43,13 @@ class _HomepageState extends State<Homepage> {
                       child: SearchPage(),
                     ),
           Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF121212),
+              ),
               padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: Center(
                 child: SalomonBottomBar(
+                  selectedItemColor: Color(0xFFEF7070),
                   currentIndex: _SelectedTab.values.indexOf(_selectedTab),
                   onTap: _handleIndexChanged,
                   items: [
