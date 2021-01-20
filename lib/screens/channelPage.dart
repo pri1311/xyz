@@ -1,9 +1,24 @@
+import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:xyz/screens/widgets.dart';
 
-class channelPage extends StatelessWidget {
-  final AppBar appBar;
-  channelPage(this.appBar);
+class ChannelScreen extends StatefulWidget {
+  ChannelScreen({Key key}) : super(key: key);
+
+  @override
+  _ChannelScreenState createState() => _ChannelScreenState();
+}
+
+class _ChannelScreenState extends State<ChannelScreen>
+    with SingleTickerProviderStateMixin {
+  FancyDrawerController _controller;
+
+  List<String> availableChannels = [
+    "general",
+    "channel",
+    "some other channel",
+  ];
+
   var messageData = [
     {
       'name': "display name 1",
@@ -45,108 +60,148 @@ class channelPage extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _controller = FancyDrawerController(
+        vsync: this, duration: Duration(milliseconds: 250))
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF121212),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFF292929),
-                ),
-                height: 60,
-                child: appBar),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.only(top: 20),
-                decoration: BoxDecoration(
-                  color: Color(0xFF121212),
-                ),
-                child: Expanded(
-                  child: ListView.separated(
-                    itemCount: messageData.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12.0),
-                        child: messageData[index]['imageMessagePath'] is Null
-                            ? messageThread(
-                                name: messageData[index]['name'],
-                                image: messageData[index]['imagepath'],
-                                message: messageData[index]['message'],
-                              )
-                            : messageThread(
-                                name: messageData[index]['name'],
-                                image: messageData[index]['imagepath'],
-                                message: messageData[index]['message'],
-                                imageFilePath: messageData[index]
-                                    ['imageMessagePath'],
-                              ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
+    return Material(
+      child: FancyDrawerWrapper(
+        backgroundColor: Colors.black,
+        controller: _controller,
+        drawerItems: <Widget>[
+          ...availableChannels.map((name) => new channelname(name)).toList(),
+        ],
+        child: Scaffold(
+          backgroundColor: Color(0xFF121212),
+          appBar: AppBar(
+            elevation: 4.0,
+            title: Text(
+              "Some appbar",
+              style: TextStyle(color: Colors.white.withOpacity(0.7)),
+            ),
+            backgroundColor: Color(0xFF292929),
+            leading: IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.white.withOpacity(0.7),
+              ),
+              onPressed: () {
+                _controller.toggle();
+              },
+            ),
+          ),
+          body: Center(
+            child: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 20),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF121212),
+                      ),
+                      child: Expanded(
+                        child: ListView.separated(
+                          itemCount: messageData.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12.0),
+                              child: messageData[index]['imageMessagePath']
+                                      is Null
+                                  ? messageThread(
+                                      name: messageData[index]['name'],
+                                      image: messageData[index]['imagepath'],
+                                      message: messageData[index]['message'],
+                                    )
+                                  : messageThread(
+                                      name: messageData[index]['name'],
+                                      image: messageData[index]['imagepath'],
+                                      message: messageData[index]['message'],
+                                      imageFilePath: messageData[index]
+                                          ['imageMessagePath'],
+                                    ),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Type a message...",
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFF292929),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: "Type a message...",
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF292929),
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white.withOpacity(0.7),
+                                  ),
+                                ),
+                                hintStyle: TextStyle(
+                                    color: Colors.white.withOpacity(0.7)),
+                                fillColor: Color(0xFFFFFFFF),
+                              ),
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.7),
+                              ),
                             ),
                           ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white.withOpacity(0.7),
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                              child: Container(
+                                child: Icon(
+                                  Icons.send,
+                                  color: Colors.white.withOpacity(0.7),
+                                ),
+                              ),
                             ),
                           ),
-                          hintStyle:
-                              TextStyle(color: Colors.white.withOpacity(0.7)),
-                          fillColor: Color(0xFFFFFFFF),
-                        ),
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        child: Container(
-                          child: Icon(
-                            Icons.send,
-                            color: Colors.white.withOpacity(0.7),
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                              child: Container(
+                                child: Icon(
+                                  Icons.image,
+                                  color: Colors.white.withOpacity(0.7),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        child: Container(
-                          child: Icon(
-                            Icons.image,
-                            color: Colors.white.withOpacity(0.7),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -159,6 +214,22 @@ class Screen1 extends StatelessWidget {
     return Container(
       child: Center(
         child: Text("data"),
+      ),
+    );
+  }
+}
+
+class channelname extends StatelessWidget {
+  var name;
+  channelname(this.name);
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "${name}",
+      style: TextStyle(
+        fontSize: 18,
+        color: Colors.white.withOpacity(0.7),
+        fontWeight: FontWeight.bold,
       ),
     );
   }

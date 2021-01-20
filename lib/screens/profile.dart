@@ -50,9 +50,12 @@ class ProfileScreen extends StatelessWidget {
                             fontSize: 30,
                           ),
                         ),
-                        Icon(
-                          Icons.logout,
-                          color: Colors.white.withOpacity(0.8),
+                        InkWell(
+                          onTap: null,
+                          child: Icon(
+                            Icons.logout,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                         ),
                       ],
                     ),
@@ -225,6 +228,17 @@ class ProfileScreen extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class Screen1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Text("data"),
       ),
     );
   }

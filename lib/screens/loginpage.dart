@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:xyz/components/roundedbutton.dart';
 import 'package:xyz/components/textdetails.dart';
-import 'package:xyz/components/header.dart';
 
 class LoginPage extends StatelessWidget {
   static const String id = 'login_screen';

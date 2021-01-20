@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:xyz/screens/appDrawer.dart';
 import 'package:xyz/screens/channelPage.dart';
 import 'package:xyz/screens/widgets.dart';
 
@@ -36,19 +35,6 @@ class _channelListState extends State<channelList> {
       ],
     }
   ];
-  AppBar appBar = AppBar(
-    backgroundColor: Color(0xFF292929),
-    title: Text('#general'),
-    leading: Builder(
-      builder: (BuildContext appBarContext) {
-        return IconButton(
-            onPressed: () {
-              AppDrawer.of(appBarContext).toggle();
-            },
-            icon: Icon(Icons.menu));
-      },
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -180,9 +166,7 @@ class _channelListState extends State<channelList> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => AppDrawer(
-                                    child: channelPage(appBar),
-                                  ),
+                                  builder: (context) => ChannelScreen(),
                                 ),
                               );
                             },
