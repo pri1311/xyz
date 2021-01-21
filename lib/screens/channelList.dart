@@ -163,6 +163,8 @@ class _channelListState extends State<channelList> {
                                           Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: RaisedButton(
+                                              elevation: 6,
+                                              focusElevation: 2,
                                               color: Color(0xFFEF7070),
                                               onPressed: () {
                                                 print('button pressed!');
@@ -239,11 +241,138 @@ class _channelListState extends State<channelList> {
                                     ),
                                   ),
                                   padding: EdgeInsets.all(10.0),
-                                  child: Text(
-                                    'Create new channel!',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.white.withOpacity(0.60),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet<void>(
+                                        isScrollControlled: true,
+                                        context: context,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30.0),
+                                              topRight: Radius.circular(30.0)),
+                                        ),
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[900],
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft:
+                                                      Radius.circular(30.0),
+                                                  topRight:
+                                                      Radius.circular(30.0)),
+                                            ),
+                                            padding: EdgeInsets.all(20),
+                                            child: Padding(
+                                                padding: MediaQuery.of(context)
+                                                    .viewInsets,
+                                                child: Container(
+                                                    child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    TextField(
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            "Name of channel",
+                                                        enabledBorder:
+                                                            UnderlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Color(
+                                                                0xFF292929),
+                                                          ),
+                                                        ),
+                                                        focusedBorder:
+                                                            UnderlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.7),
+                                                          ),
+                                                        ),
+                                                        hintStyle: TextStyle(
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.7)),
+                                                        fillColor:
+                                                            Color(0xFFFFFFFF),
+                                                      ),
+                                                      style: TextStyle(
+                                                        color: Colors.white
+                                                            .withOpacity(0.7),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 30,
+                                                    ),
+                                                    TextField(
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            "Admin username",
+                                                        enabledBorder:
+                                                            UnderlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Color(
+                                                                0xFF292929),
+                                                          ),
+                                                        ),
+                                                        focusedBorder:
+                                                            UnderlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.7),
+                                                          ),
+                                                        ),
+                                                        hintStyle: TextStyle(
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.7)),
+                                                        fillColor:
+                                                            Color(0xFFFFFFFF),
+                                                      ),
+                                                      style: TextStyle(
+                                                        color: Colors.white
+                                                            .withOpacity(0.7),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              20.0),
+                                                      child: RaisedButton(
+                                                        elevation: 6,
+                                                        focusElevation: 2,
+                                                        color:
+                                                            Color(0xFFEF7070),
+                                                        onPressed: () {
+                                                          print(
+                                                              'button pressed!');
+                                                        },
+                                                        child: const Text(
+                                                          'Create Channel',
+                                                          style: TextStyle(
+                                                              fontSize: 20),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ))),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                      'Create new channel!',
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.white.withOpacity(0.60),
+                                      ),
                                     ),
                                   ),
                                 ),
