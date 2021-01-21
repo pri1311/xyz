@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:xyz/screens/channelPage.dart';
 import 'package:xyz/screens/widgets.dart';
@@ -78,7 +80,105 @@ class _channelListState extends State<channelList> {
                           color: Color(0xFF121212).withOpacity(0.3),
                         ),
                         child: IconButton(
-                          onPressed: null,
+                          onPressed: () {
+                            showModalBottomSheet<void>(
+                              isScrollControlled: true,
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0)),
+                              ),
+                              builder: (BuildContext context) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[900],
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30.0),
+                                        topRight: Radius.circular(30.0)),
+                                  ),
+                                  padding: EdgeInsets.all(20),
+                                  child: Padding(
+                                      padding:
+                                          MediaQuery.of(context).viewInsets,
+                                      child: Container(
+                                          child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          TextField(
+                                            decoration: InputDecoration(
+                                              hintText: "Name of workspace",
+                                              enabledBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0xFF292929),
+                                                ),
+                                              ),
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white
+                                                      .withOpacity(0.7),
+                                                ),
+                                              ),
+                                              hintStyle: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.7)),
+                                              fillColor: Color(0xFFFFFFFF),
+                                            ),
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white.withOpacity(0.7),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 30,
+                                          ),
+                                          TextField(
+                                            decoration: InputDecoration(
+                                              hintText: "Admin username",
+                                              enabledBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0xFF292929),
+                                                ),
+                                              ),
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white
+                                                      .withOpacity(0.7),
+                                                ),
+                                              ),
+                                              hintStyle: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.7)),
+                                              fillColor: Color(0xFFFFFFFF),
+                                            ),
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white.withOpacity(0.7),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: RaisedButton(
+                                              color: Color(0xFFEF7070),
+                                              onPressed: () {
+                                                print('button pressed!');
+                                              },
+                                              child: const Text(
+                                                'Create Workspace',
+                                                style: TextStyle(fontSize: 20),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ))),
+                                );
+                              },
+                            );
+                          },
                           icon: Icon(
                             Icons.add,
                             color: Colors.white.withOpacity(0.6),
