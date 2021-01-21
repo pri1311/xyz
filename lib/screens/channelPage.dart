@@ -89,7 +89,7 @@ class _ChannelScreenState extends State<ChannelScreen>
           appBar: AppBar(
             elevation: 4.0,
             title: Text(
-              "Some appbar",
+              "Channel name",
               style: TextStyle(color: Colors.white.withOpacity(0.7)),
             ),
             backgroundColor: Color(0xFF292929),
@@ -224,12 +224,22 @@ class channelname extends StatelessWidget {
   channelname(this.name);
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "${name}",
-      style: TextStyle(
-        fontSize: 18,
-        color: Colors.white.withOpacity(0.7),
-        fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChannelScreen(),
+          ),
+        );
+      },
+      child: Text(
+        "${name}",
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.white.withOpacity(0.7),
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

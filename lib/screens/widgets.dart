@@ -71,7 +71,7 @@ class messageThread extends StatelessWidget {
               Container(
                 width: width * 0.75,
                 child: ChatBubble(
-                  backGroundColor: Color(0xFF292929),
+                  backGroundColor: Color(0xFF121212).withOpacity(0.8),
                   clipper: ChatBubbleClipper4(
                     type: BubbleType.receiverBubble,
                     nipSize: 0,
