@@ -1,5 +1,6 @@
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:xyz/screens/homepage.dart';
 import 'package:xyz/screens/widgets.dart';
 
 class ChannelScreen extends StatefulWidget {
@@ -78,127 +79,140 @@ class _ChannelScreenState extends State<ChannelScreen>
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: FancyDrawerWrapper(
-        backgroundColor: Colors.black,
-        controller: _controller,
-        drawerItems: <Widget>[
-          ...availableChannels.map((name) => new channelname(name)).toList(),
-        ],
-        child: Scaffold(
-          backgroundColor: Color(0xFF121212),
-          appBar: AppBar(
-            elevation: 4.0,
-            title: Text(
-              "Channel name",
-              style: TextStyle(color: Colors.white.withOpacity(0.7)),
+      child: WillPopScope(
+        onWillPop: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Homepage(),
             ),
-            backgroundColor: Color(0xFF292929),
-            leading: IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: Colors.white.withOpacity(0.7),
+          );
+        },
+        child: FancyDrawerWrapper(
+          cornerRadius: 20,
+          itemGap: 20,
+          backgroundColor: Colors.black,
+          controller: _controller,
+          drawerItems: <Widget>[
+            ...availableChannels.map((name) => new channelname(name)).toList(),
+          ],
+          child: Scaffold(
+            backgroundColor: Color(0xFF121212),
+            appBar: AppBar(
+              elevation: 4.0,
+              title: Text(
+                "Channel name",
+                style: TextStyle(color: Colors.white.withOpacity(0.7)),
               ),
-              onPressed: () {
-                _controller.toggle();
-              },
+              backgroundColor: Color(0xFF292929),
+              leading: IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: Colors.white.withOpacity(0.7),
+                ),
+                onPressed: () {
+                  _controller.toggle();
+                },
+              ),
             ),
-          ),
-          body: Center(
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(top: 20),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF121212),
-                      ),
-                      child: Expanded(
-                        child: ListView.separated(
-                          itemCount: messageData.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.0),
-                              child: messageData[index]['imageMessagePath']
-                                      is Null
-                                  ? messageThread(
-                                      name: messageData[index]['name'],
-                                      image: messageData[index]['imagepath'],
-                                      message: messageData[index]['message'],
-                                    )
-                                  : messageThread(
-                                      name: messageData[index]['name'],
-                                      image: messageData[index]['imagepath'],
-                                      message: messageData[index]['message'],
-                                      imageFilePath: messageData[index]
-                                          ['imageMessagePath'],
-                                    ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
+            body: Center(
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.only(top: 20),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF121212),
+                        ),
+                        child: Expanded(
+                          child: ListView.separated(
+                            itemCount: messageData.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12.0),
+                                child: messageData[index]['imageMessagePath']
+                                        is Null
+                                    ? messageThread(
+                                        name: messageData[index]['name'],
+                                        image: messageData[index]['imagepath'],
+                                        message: messageData[index]['message'],
+                                      )
+                                    : messageThread(
+                                        name: messageData[index]['name'],
+                                        image: messageData[index]['imagepath'],
+                                        message: messageData[index]['message'],
+                                        imageFilePath: messageData[index]
+                                            ['imageMessagePath'],
+                                      ),
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 6,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: "Type a message...",
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0xFF292929),
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 6,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: "Type a message...",
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFF292929),
+                                    ),
                                   ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.7),
+                                    ),
+                                  ),
+                                  hintStyle: TextStyle(
+                                      color: Colors.white.withOpacity(0.7)),
+                                  fillColor: Color(0xFFFFFFFF),
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.7),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: GestureDetector(
+                                child: Container(
+                                  child: Icon(
+                                    Icons.send,
                                     color: Colors.white.withOpacity(0.7),
                                   ),
                                 ),
-                                hintStyle: TextStyle(
-                                    color: Colors.white.withOpacity(0.7)),
-                                fillColor: Color(0xFFFFFFFF),
-                              ),
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.7),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: GestureDetector(
-                              child: Container(
-                                child: Icon(
-                                  Icons.send,
-                                  color: Colors.white.withOpacity(0.7),
+                            Expanded(
+                              flex: 1,
+                              child: GestureDetector(
+                                child: Container(
+                                  child: Icon(
+                                    Icons.image,
+                                    color: Colors.white.withOpacity(0.7),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: GestureDetector(
-                              child: Container(
-                                child: Icon(
-                                  Icons.image,
-                                  color: Colors.white.withOpacity(0.7),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

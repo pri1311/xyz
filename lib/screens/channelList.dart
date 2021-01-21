@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:xyz/screens/channelPage.dart';
 import 'package:xyz/screens/widgets.dart';
 
@@ -106,6 +105,7 @@ class _channelListState extends State<channelList> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           TextField(
+                                            autofocus: true,
                                             decoration: InputDecoration(
                                               hintText: "Name of workspace",
                                               enabledBorder:
@@ -271,6 +271,7 @@ class _channelListState extends State<channelList> {
                                                       MainAxisSize.min,
                                                   children: <Widget>[
                                                     TextField(
+                                                      autofocus: true,
                                                       decoration:
                                                           InputDecoration(
                                                         hintText:
@@ -393,11 +394,11 @@ class _channelListState extends State<channelList> {
                           return InkWell(
                             onTap: () {
                               Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChannelScreen(),
-                                ),
-                              );
+                                  context,
+                                  PageTransition(
+                                      duration: Duration(milliseconds: 500),
+                                      type: PageTransitionType.leftToRight,
+                                      child: ChannelScreen()));
                             },
                             child: Material(
                               color: Color(0xFF121212).withOpacity(0.70),
