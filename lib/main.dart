@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
               child: Registeration(),
               type: PageTransitionType.rightToLeft,
               settings: settings,
-              duration: Duration(seconds: 1),
-              reverseDuration: Duration(seconds: 1),
+              duration: Duration(milliseconds: 500),
+              reverseDuration: Duration(milliseconds: 500),
             );
             break;
           case '/login':
@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
               child: LoginPage(),
               type: PageTransitionType.rightToLeft,
               settings: settings,
-              duration: Duration(seconds: 1),
-              reverseDuration: Duration(seconds: 1),
+              duration: Duration(milliseconds: 500),
+              reverseDuration: Duration(milliseconds: 500),
             );
             break;
           default:
