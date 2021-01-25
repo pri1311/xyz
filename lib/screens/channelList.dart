@@ -5,6 +5,7 @@ import 'package:xyz/screens/widgets.dart';
 
 // ignore: camel_case_types
 class channelList extends StatefulWidget {
+  static const String id = 'channel_list';
   @override
   _channelListState createState() => _channelListState();
 }

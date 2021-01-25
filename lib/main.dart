@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:xyz/screens/welcomepage.dart';
+import 'package:xyz/screens/registerpage.dart';
+import 'package:xyz/screens/loginpage.dart';
+import 'package:xyz/screens/channelPage.dart';
+import 'package:xyz/screens/channelList.dart';
+import 'package:xyz/screens/profile.dart';
+import 'package:xyz/screens/searchPage.dart';
 import 'package:xyz/screens/homepage.dart';
 
 void main() {
@@ -11,7 +18,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      initialRoute: WelcomeScreen.id,
+      routes: {
+        WelcomeScreen.id: (context) => WelcomeScreen(),
+        Registeration.id: (context) => Registeration(),
+        LoginPage.id:(context)=>LoginPage(),
+        channelList.id:(context)=>channelList(),
+      },
     );
   }
 }

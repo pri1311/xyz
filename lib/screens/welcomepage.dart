@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xyz/components/items.dart';
+import 'package:xyz/screens/loginpage.dart';
+import 'package:xyz/screens/registerpage.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -139,14 +141,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: button(
                         text: 'Log in',
                         colour: Color(0xFFE47070),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, LoginPage.id);
+                        },
                       )),
                   Expanded(
                     flex: 1,
                     child: button(
                       text: 'Sign up',
                       colour: Color(0xFFE47070),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, Registeration.id);
+                      },
                     ),
                   ),
                 ],
