@@ -7,12 +7,14 @@ import 'package:xyz/screens/searchPage.dart';
 enum _SelectedTab { home, search, profile }
 
 class Homepage extends StatefulWidget {
+  static const String id = 'Home_page';
   @override
   _HomepageState createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
   var _selectedTab = _SelectedTab.home;
+  static const String id = 'Home_page';
 
   void _handleIndexChanged(int i) {
     setState(() {

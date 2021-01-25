@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:xyz/components/items.dart';
-import 'package:xyz/screens/loginpage.dart';
-import 'package:xyz/screens/registerpage.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -97,11 +95,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 120.0),
-            child: Stack(
-              children: <Widget>[
-                PageView.builder(
+          Column(
+            children: [
+              Flexible(
+                flex: 6,
+                child: PageView.builder(
                   controller: _pageViewController,
                   itemCount: slides.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -113,21 +111,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     return slides[index];
                   },
                 ),
-                Padding(
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
                   padding: EdgeInsets.only(bottom: 80.0),
                   child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
-                        margin: EdgeInsets.only(top: 70.0),
-                        padding: EdgeInsets.symmetric(vertical: 40.0),
+                        padding: EdgeInsets.only(bottom: 40.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: indicator(),
                         ),
                       )),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -142,7 +142,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         text: 'Log in',
                         colour: Color(0xFFE47070),
                         onPressed: () {
-                          Navigator.pushNamed(context, LoginPage.id);
+                          Navigator.pushNamed(
+                            context,
+                            "/login",
+                          );
+                          //Navigator.pushNamed(context, LoginPage.id);
                         },
                       )),
                   Expanded(
@@ -151,7 +155,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       text: 'Sign up',
                       colour: Color(0xFFE47070),
                       onPressed: () {
-                        Navigator.pushNamed(context, Registeration.id);
+                        Navigator.pushNamed(
+                          context,
+                          "/register",
+                        );
+                        //Navigator.pushNamed(context, Registeration.id);
                       },
                     ),
                   ),

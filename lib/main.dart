@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:xyz/screens/welcomepage.dart';
 import 'package:xyz/screens/registerpage.dart';
 import 'package:xyz/screens/loginpage.dart';
-import 'package:xyz/screens/channelPage.dart';
-import 'package:xyz/screens/channelList.dart';
-import 'package:xyz/screens/profile.dart';
-import 'package:xyz/screens/searchPage.dart';
 import 'package:xyz/screens/homepage.dart';
 
 void main() {
@@ -19,11 +16,35 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: WelcomeScreen.id,
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/register':
+            return PageTransition(
+              child: Registeration(),
+              type: PageTransitionType.rightToLeft,
+              settings: settings,
+              duration: Duration(seconds: 1),
+              reverseDuration: Duration(seconds: 1),
+            );
+            break;
+          case '/login':
+            return PageTransition(
+              child: LoginPage(),
+              type: PageTransitionType.rightToLeft,
+              settings: settings,
+              duration: Duration(seconds: 1),
+              reverseDuration: Duration(seconds: 1),
+            );
+            break;
+          default:
+            return null;
+        }
+      },
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
         Registeration.id: (context) => Registeration(),
-        LoginPage.id:(context)=>LoginPage(),
-        channelList.id:(context)=>channelList(),
+        LoginPage.id: (context) => LoginPage(),
+        Homepage.id: (context) => Homepage(),
       },
     );
   }
