@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:xyz/screens/channelList.dart';
+import 'package:xyz/screens/homepage.dart';
 
 class Registeration extends StatefulWidget {
   static const String id = 'register_screen';
@@ -17,15 +18,15 @@ class Registeration extends StatefulWidget {
 class _RegisterationState extends State<Registeration> {
   String name;
   String username;
-  String password,confirm_pass,email;
+  String password, confirm_pass, email;
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
 
   //function to validate and save user form
-  Future<void> _savingData() async{
+  Future<void> _savingData() async {
     final validation = _form.currentState.validate();
-    if (!validation){
+    if (!validation) {
       return;
     }
     _form.currentState.save();
@@ -78,16 +79,15 @@ class _RegisterationState extends State<Registeration> {
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: TextDetails(
                           text: 'Name',
-                          onSaved: (String value){
+                          onSaved: (String value) {
                             name = value;
                           },
-                          validator: (value){
-                            if(value.isEmpty){
+                          validator: (value) {
+                            if (value.isEmpty) {
                               return 'Cannot Be Empty';
                             }
                             return null;
                           },
-
                         ),
                       ),
                       SizedBox(
@@ -96,17 +96,15 @@ class _RegisterationState extends State<Registeration> {
                       TextDetails(
                         text: 'Username',
                         val: false,
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           username = value;
                         },
-                        validator: (value){
-                          if(value.isEmpty){
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return 'Cannot Be Empty';
                           }
                           return null;
                         },
-
-
                       ),
                       SizedBox(
                         height: 10.0,
@@ -114,11 +112,11 @@ class _RegisterationState extends State<Registeration> {
                       TextDetails(
                         text: 'E-mail',
                         val: false,
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           email = value;
                         },
-                        validator: (value){
-                          if(value.isEmpty){
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return 'Cannot Be Empty';
                           }
                           return null;
@@ -131,14 +129,14 @@ class _RegisterationState extends State<Registeration> {
                         text: 'Password',
                         val: true,
                         controller: _pass,
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           password = value;
                         },
-                        validator: (value){
-                          if(value.isEmpty){
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return "Please Enter New Password";
                           }
-                          if(value.length < 8){
+                          if (value.length < 8) {
                             return "Password must be at least 8 characters long";
                           }
                           return null;
@@ -151,7 +149,7 @@ class _RegisterationState extends State<Registeration> {
                         text: 'Confirm Password',
                         controller: _confirmPass,
                         val: true,
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           confirm_pass = value;
                         },
                         validator: (String value) {
@@ -175,34 +173,48 @@ class _RegisterationState extends State<Registeration> {
                 RoundedButton(
                   colour: Color(0xFFE47070),
                   title: 'Sign Up',
-                  onPressed: () async{
-
+                  onPressed: () async {
                     _savingData();
-                    final url = 'http://127.0.0.1:5000/register';
-                    final response =  await http.post('http://127.0.0.1:5000/register',body:
-                    json.encode({'fullname':name,'username':username,'password':password,'email':email})
-                    );
-                    final decoded = json.decode(response.body) as Map<String, dynamic>;
+                    final url = 'http://10.0.2.2:8000/register';
+                    final response = await http.post(
+                        'http://10.0.2.2:8000/register',
+                        body: json.encode({
+                          'fullname': name,
+                          'username': username,
+                          'password': password,
+                          'email': email
+                        }));
+                    //print(response.body);
+                    final decoded =
+                        json.decode(response.body) as Map<String, dynamic>;
+                    //print(decoded);
+                    final status =
+                        json.decode(decoded['status']) as Map<String, dynamic>;
+                    //print(status);
                     setState(() {
-                      if(decoded['status']['type']=='success'){
-                        Navigator.pushNamed(context, channelList.id);
-                      }
-                      else{
+                      if (status['type'] == 'success') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Homepage(),
+                            ));
+                      } else {
                         Alert(
                           context: context,
                           type: AlertType.error,
                           title: 'Unsucessful Registeration',
-                          desc: decoded['status']['message'],
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "COOL",
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                                width: 120,
-                              )
-                            ],
+                          //desc: decoded['status']['message'],
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "COOL",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
                         ).show();
                       }
                     });

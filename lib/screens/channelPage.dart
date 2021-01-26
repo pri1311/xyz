@@ -21,6 +21,8 @@ class _ChannelScreenState extends State<ChannelScreen>
     "some other channel",
   ];
 
+  ScrollController controller = new ScrollController();
+
   var messageData = [
     {
       'name': "display name 1",
@@ -128,6 +130,8 @@ class _ChannelScreenState extends State<ChannelScreen>
                         ),
                         child: Expanded(
                           child: ListView.separated(
+                            //controller.animateTo(controller.position.maxScrollExtent),
+                            controller: controller,
                             itemCount: messageData.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Container(

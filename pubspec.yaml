@@ -36,6 +36,7 @@ dependencies:
   page_transition: "^1.1.7+6"
   http: ^0.12.2
   rflutter_alert: ^1.1.0
+  circular_menu: ^1.1.2
   
   
 

@@ -18,16 +18,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String password,username;
+  String password, username;
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   //function to validate and save user form
-  Future<void> _savingData() async{
+  Future<void> _savingData() async {
     final validation = _form.currentState.validate();
-    if (!validation){
+    if (!validation) {
       return;
     }
     _form.currentState.save();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,29 +76,28 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                         child: TextDetails(
                           text: 'Username',
-                          onSaved: (String value){
+                          onSaved: (String value) {
                             username = value;
                           },
-                          validator: (value){
-                            if(value.isEmpty){
+                          validator: (value) {
+                            if (value.isEmpty) {
                               return 'Cannot Be Empty';
                             }
                             return null;
                           },
                         ),
-
                       ),
                       TextDetails(
                         text: 'Password',
                         val: true,
-                        onSaved: (String value){
+                        onSaved: (String value) {
                           password = value;
                         },
-                        validator: (value){
-                          if(value.isEmpty){
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return "Please Enter New Password";
                           }
-                          if(value.length < 8){
+                          if (value.length < 8) {
                             return "Password must be at least 8 characters long";
                           }
                           return null;
@@ -126,19 +126,19 @@ class _LoginPageState extends State<LoginPage> {
                 RoundedButton(
                   colour: Color(0xFFE47070),
                   title: 'Log In',
-                  onPressed: () async{
-
+                  onPressed: () async {
                     _savingData();
-                    final url = 'http://127.0.0.1:5000/register';
-                    final response =  await http.post('http://127.0.0.1:5000/register',body:
-                    json.encode({'username':username,'password':password})
-                    );
-                    final decoded = json.decode(response.body) as Map<String, dynamic>;
+                    final url = 'http://10.0.2.2:5000/register';
+                    final response = await http.post(
+                        'http://10.0.2.2:5000/register',
+                        body: json.encode(
+                            {'username': username, 'password': password}));
+                    final decoded =
+                        json.decode(response.body) as Map<String, dynamic>;
                     setState(() {
-                      if(decoded['status']['type']=='success'){
+                      if (decoded['status']['type'] == 'success') {
                         Navigator.pushNamed(context, channelList.id);
-                      }
-                      else{
+                      } else {
                         Alert(
                           context: context,
                           type: AlertType.error,
@@ -148,7 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                             DialogButton(
                               child: Text(
                                 "COOL",
-                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               ),
                               onPressed: () => Navigator.pop(context),
                               width: 120,
@@ -163,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                   colour: Color(0xFFE47070),
                   title: "Don't have an account?"
                       " Sign up instead",
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pushNamed(context, Registeration.id);
                   },
                 ),
