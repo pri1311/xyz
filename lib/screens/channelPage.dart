@@ -1,5 +1,6 @@
 import 'package:fancy_drawer/fancy_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:xyz/screens/homepage.dart';
 import 'package:xyz/screens/widgets.dart';
 
@@ -82,11 +83,11 @@ class _ChannelScreenState extends State<ChannelScreen>
       child: WillPopScope(
         onWillPop: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Homepage(),
-            ),
-          );
+              context,
+              PageTransition(
+                  duration: Duration(milliseconds: 500),
+                  type: PageTransitionType.rightToLeftWithFade,
+                  child: Homepage()));
         },
         child: FancyDrawerWrapper(
           cornerRadius: 20,
@@ -248,6 +249,7 @@ class channelname extends StatelessWidget {
         );
       },
       child: Text(
+        // ignore: unnecessary_brace_in_string_interps
         "${name}",
         style: TextStyle(
           fontSize: 18,

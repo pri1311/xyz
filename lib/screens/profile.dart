@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:xyz/screens/editProfile.dart';
 
 class ProfileScreen extends StatelessWidget {
   final Function _handleIndexChange;
@@ -113,10 +115,25 @@ class ProfileScreen extends StatelessWidget {
                               Positioned(
                                 top: 100,
                                 right: 20,
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Color(0xFFFFFFFF).withOpacity(0.50),
-                                  size: 30,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            type:
+                                                PageTransitionType.rightToLeft,
+                                            child: editProfile()));
+                                  },
+                                  child: Container(
+                                    child: Icon(
+                                      Icons.edit,
+                                      color:
+                                          Color(0xFFFFFFFF).withOpacity(0.50),
+                                      size: 30,
+                                    ),
+                                  ),
                                 ),
                               ),
                               Positioned(

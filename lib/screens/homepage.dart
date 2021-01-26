@@ -14,7 +14,6 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   var _selectedTab = _SelectedTab.home;
-  static const String id = 'Home_page';
 
   void _handleIndexChanged(int i) {
     setState(() {
