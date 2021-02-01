@@ -128,9 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                   title: 'Log In',
                   onPressed: () async {
                     _savingData();
-                    final url = 'http://10.0.2.2:5000/register';
+                    final url = 'http://10.0.2.2:5000/login';
                     final response = await http.post(
-                        'http://10.0.2.2:5000/register',
+                        'http://10.0.2.2:5000/login',
                         body: json.encode(
                             {'username': username, 'password': password}));
                     final decoded =

@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:xyz/screens/channelList.dart';
 import 'package:xyz/screens/homepage.dart';
+import 'package:xyz/screens/loginpage.dart';
 
 class Registeration extends StatefulWidget {
   static const String id = 'register_screen';
@@ -18,7 +19,8 @@ class Registeration extends StatefulWidget {
 class _RegisterationState extends State<Registeration> {
   String name;
   String username;
-  String password, confirm_pass, email;
+  String password, confirm_pass, email, otp1, otp2;
+  int number;
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
@@ -126,6 +128,22 @@ class _RegisterationState extends State<Registeration> {
                         height: 10.0,
                       ),
                       TextDetails(
+                        text: 'Phone number',
+                        val: false,
+                        onSaved: (value) {
+                          number = value;
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Cannot Be Empty';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      TextDetails(
                         text: 'Password',
                         val: true,
                         controller: _pass,
@@ -175,15 +193,16 @@ class _RegisterationState extends State<Registeration> {
                   title: 'Sign Up',
                   onPressed: () async {
                     _savingData();
-                    final url = 'http://10.0.2.2:8000/register';
-                    final response = await http.post(
-                        'http://10.0.2.2:8000/register',
-                        body: json.encode({
-                          'fullname': name,
-                          'username': username,
-                          'password': password,
-                          'email': email
-                        }));
+                    final url = 'http://10.0.2.2:8000/verify';
+                    final response =
+                        await http.post('http://10.0.2.2:8000/verify',
+                            body: json.encode({
+                              'fullname': name,
+                              'username': username,
+                              'email': email,
+                              'number': number,
+                              'password': password,
+                            }));
                     //print(response.body);
                     final decoded =
                         json.decode(response.body) as Map<String, dynamic>;
@@ -193,17 +212,87 @@ class _RegisterationState extends State<Registeration> {
                     //print(status);
                     setState(() {
                       if (status['type'] == 'success') {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Homepage(),
-                            ));
+                        Alert(
+                            context: context,
+                            title: "verify",
+                            content: Column(
+                              children: <Widget>[
+                                TextField(
+                                  decoration: InputDecoration(
+                                    icon: Icon(Icons.send_to_mobile),
+                                    labelText: 'OTP for mobile',
+                                  ),
+                                  onChanged: (value) {
+                                    otp1 = value;
+                                  },
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    icon: Icon(Icons.email),
+                                    labelText: 'OTP for email',
+                                  ),
+                                  onChanged: (value) {
+                                    otp2 = value;
+                                  },
+                                ),
+                              ],
+                            ),
+                            buttons: [
+                              DialogButton(
+                                onPressed: () async {
+                                  final url = 'http://10.0.2.2:8000/register';
+                                  final response = await http.post(
+                                      'http://10.0.2.2:8000/register',
+                                      body: json.encode({
+                                        'otp1': otp1,
+                                        'otp2':otp2,
+
+                                      }));
+                                  final decoded = json.decode(response.body)
+                                      as Map<String, dynamic>;
+                                  //print(decoded);
+                                  final status = json.decode(decoded['status'])
+                                      as Map<String, dynamic>;
+                                  setState(() {
+                                    if (status['type'] == 'success') {
+                                      Navigator.pushNamed(
+                                          context, channelList.id);
+                                    } else {
+                                      Alert(
+                                        context: context,
+                                        type: AlertType.error,
+                                        title: 'Unsucessful Registeration',
+                                        desc: decoded['status']['message'],
+                                        buttons: [
+                                          DialogButton(
+                                            child: Text(
+                                              "COOL",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20),
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            width: 120,
+                                          )
+                                        ],
+                                      ).show();
+                                    }
+                                  });
+                                },
+                                child: Text(
+                                  "verify",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              )
+                            ]).show();
                       } else {
                         Alert(
                           context: context,
                           type: AlertType.error,
                           title: 'Unsucessful Registeration',
-                          //desc: decoded['status']['message'],
+                          desc: decoded['status']['message'],
                           buttons: [
                             DialogButton(
                               child: Text(
@@ -220,8 +309,10 @@ class _RegisterationState extends State<Registeration> {
                     });
                   },
                 ),
-                RoundedButton(
-                    colour: Color(0xFFE47070), title: "I am already a member"),
+                RoundedButton(colour: Color(0xFFE47070), title: "I am already a member",onPressed: (){
+                  Navigator.pushNamed(context, LoginPage.id);
+                },),
+
               ],
             ),
           ),
