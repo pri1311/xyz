@@ -11,8 +11,14 @@ def home():
 
 @app.route("/login", methods=['POST'])
 def login():
-    username = request.form.get('username')
-    password = request.form.get('password')
+    data=request.data
+    data=json.loads(data.decode('utf-8'))
+    username=data['username']
+    password=data['password']
+    print(username,password)
+
+    # username = request.form.get('username')
+    # password = request.form.get('password')
 
     msg = ""
     if not username or not password:
@@ -20,6 +26,8 @@ def login():
         return jsonify(msg)
 
     user = User.query.filter_by(username=username).first()
+    print(User.query.filter_by(username=username).first())
+    print(user)
     if user is None or not user.check_password(password):
         msg = {"status": {"type": "failure", "message": "Username or password incorrect"}}
     else:
