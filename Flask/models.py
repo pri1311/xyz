@@ -7,7 +7,7 @@ class User(db.Model):
     name = db.Column(db.String(80), index=True)
     username = db.Column(db.String(80), index=True, unique=True)
     email = db.Column(db.String(80), index=True, unique=True)
-    number = db.Column(db.Integer, index=True, unique=True)
+    number = db.Column(db.String(10), index=True, unique=True)
 
     password_hash = db.Column(db.String(128))
 

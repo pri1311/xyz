@@ -14,7 +14,7 @@ current_direc = os.getcwd()
 databasePath = os.path.join(current_direc,"database.db")
 
 
-app.config['SQLALCHEMY_DATABSE_URI'] = 'sqllite:///'+databasePath
+app.config['SQLALCHEMY_DATABSE_URI'] = 'sqlite:///'+databasePath
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 db = SQLAlchemy(app)

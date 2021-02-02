@@ -7,6 +7,7 @@ from twilio.rest import Client
 import random
 import sendgrid
 from sendgrid.helpers.mail import *
+import requests 
 
 
 @app.route("/")
@@ -16,22 +17,11 @@ def home():
 
 @app.route("/login", methods=['POST'])
 def login():
-<<<<<<< HEAD
-    data=request.data
-    data=json.loads(data.decode('utf-8'))
-    username=data['username']
-    password=data['password']
-    print(username,password)
-
-    # username = request.form.get('username')
-    # password = request.form.get('password')
-=======
-    request_data = request.data
+    request_data=request.data
     request_data = json.loads(request_data.decode('utf-8'))
 
     username = request_data['username']
     password = request_data['password']
->>>>>>> 4cf0551a56929323dbbd734fbe7724ee8fd97757
 
     msg = ""
     if not username or not password:
@@ -55,13 +45,6 @@ data = {}
 @app.route('/verify', methods=['POST'])
 def verify():
 
-<<<<<<< HEAD
-@app.route("/register", methods=['POST'])
-def register():
-    
-    global response;
-=======
->>>>>>> 4cf0551a56929323dbbd734fbe7724ee8fd97757
     request_data = request.data
     request_data = json.loads(request_data.decode('utf-8'))
 
@@ -79,22 +62,6 @@ def register():
     if not data['username'] or not data['name'] or not data['password'] or not data['number'] or not data['email']:
         msg = {"status": {"type": "failure", "message": "missing data"}}
         return jsonify(msg)
-<<<<<<< HEAD
-    
-    if User.query.filter_by(username=username).count() == 1:
-        msg = {"status": {"type": "failure", "message": "username already taken"}}
-        return jsonify(msg)
-    
-    if User.query.filter_by(email=email).count() == 1:
-        msg = {"status": {"type": "failure", "message": "email already taken"}}
-        return jsonify(msg)
-    
-    u = User()
-    u.username = username
-    u.name = name
-    u.email = email
-    u.set_password(password)
-=======
 
     if User.query.filter_by(username=data['username']).count() == 1:
         msg = {"status": {"type": "failure", "message": "username already taken"}}
@@ -110,21 +77,51 @@ def register():
 
     # Your Account Sid and Auth Token from twilio.com/console
     # and set the environment variables. See http://twil.io/secure
-    account_sid = os.environ['AC80945ac6290616dbe73ccabec15aa7f7']
-    auth_token = os.environ['ce78106ac13db1ff0bfa6cd3fa26a2aa']
-    client = Client(account_sid, auth_token)
+    # account_sid = os.environ['AC80945ac6290616dbe73ccabec15aa7f7']
+    # auth_token = os.environ['ce78106ac13db1ff0bfa6cd3fa26a2aa']
+    client = Client('AC80945ac6290616dbe73ccabec15aa7f7', 'ce78106ac13db1ff0bfa6cd3fa26a2aa')
 
-    message = client.messages \
-        .create(
-            body='Your OTP is ' + str(otp1),
-            from_='+13153090592',
-            to=str(data['number'])
-    )
+    # # mention url 
+    # url = "https://www.fast2sms.com/dev/bulk"
+    
+    
+    # # create a dictionary 
+    # my_data = { 
+    #     # Your default Sender ID 
+    #     'sender_id': 'XYZ',  
+        
+    #     # Put your message here! 
+    #     'message': otp1,  
+        
+    #     'language': 'english', 
+    #     'route': 'p', 
+        
+    #     # You can send sms to multiple numbers 
+    #     # separated by comma. 
+    #     'numbers': data['number']    
+    # } 
+    
+    # # create a dictionary 
+    # headers = { 
+    #     'authorization': 'NxMF93WuaXPsTjnDBReCqfUr6GiLH8ck7pA4wblmYSdV5tJyQoaT9gRvXhCox03BFsk2yQMuEVr1bpWL', 
+    #     'Content-Type': "application/x-www-form-urlencoded", 
+    #     'Cache-Control': "no-cache"
+    # }
+    # # make a post request 
+    # response = requests.request("POST", 
+    #                             url, 
+    #                             data = my_data, 
+    #                             headers = headers) 
+    # # load json data from source 
+    # returned_msg = json.loads(response.text) 
+    
+    # # print the send message 
+    # print(returned_msg['message'])
     sg = sendgrid.SendGridAPIClient(api_key='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')
     from_email = Email("xyz.noreply.xyz@gmail.com")
     to_email = To(data['email'])
     subject = "OTP verification for xyz"
-    content = Content("Your OTP is "+str(otp2))
+    content = Content("text/plain","Your OTP is "+str(otp2))
     mail = Mail(from_email, to_email, subject, content)
     response = sg.client.mail.send.post(request_body=mail.get())
     msg ={"status": {"type": "success"}}
@@ -151,7 +148,6 @@ def register():
         u.number = data['number']
         u.set_password(data['password'])
 
->>>>>>> 4cf0551a56929323dbbd734fbe7724ee8fd97757
 
         db.session.add(u)
         db.session.commit()
