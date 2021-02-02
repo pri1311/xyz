@@ -1,15 +1,15 @@
 from flask import Flask, request, jsonify
 from app import app, db
-from models import User
+from models import *
 import json
 
 
-@app.route('/')
+@app.route("/")
 def home():
     return "Home"
 
 
-@app.route('/login', methods=['POST'])
+@app.route("/login", methods=['POST'])
 def login():
     username = request.form.get('username')
     password = request.form.get('password')
@@ -31,8 +31,9 @@ def login():
     return jsonify(msg)
 
 
-@app.route('/register', methods=['POST'])
+@app.route("/register", methods=['POST'])
 def register():
+    
     global response;
     request_data = request.data
     request_data = json.loads(request_data.decode('utf-8'))
@@ -47,15 +48,15 @@ def register():
     if not username or not password or not email or not name:
         msg = {"status": {"type": "failure", "message": "missing data"}}
         return jsonify(msg)
-
+    
     if User.query.filter_by(username=username).count() == 1:
         msg = {"status": {"type": "failure", "message": "username already taken"}}
         return jsonify(msg)
-
+    
     if User.query.filter_by(email=email).count() == 1:
         msg = {"status": {"type": "failure", "message": "email already taken"}}
         return jsonify(msg)
-
+    
     u = User()
     u.username = username
     u.name = name
