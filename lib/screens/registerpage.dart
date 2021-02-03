@@ -203,10 +203,10 @@ class _RegisterationState extends State<Registeration> {
                               'number': number,
                               'password': password,
                             }));
-                    print(response.body);
+                    //print(response.body);
                     final decoded =
                         json.decode(response.body) as Map<String, dynamic>;
-                    print(decoded);
+                    //print(decoded);
                     setState(() {
                       if (decoded['status']['type'] == 'success') {
                         Alert(
