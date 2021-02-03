@@ -8,6 +8,7 @@ import random
 import sendgrid
 from sendgrid.helpers.mail import *
 import requests 
+import smtplib
 
 
 @app.route("/")
@@ -45,6 +46,8 @@ data = {}
 @app.route('/verify', methods=['POST'])
 def verify():
 
+    global otp1,otp2
+
     request_data = request.data
     request_data = json.loads(request_data.decode('utf-8'))
 
@@ -58,6 +61,7 @@ def verify():
     otp2 = random.randint(100000, 999999)
     data['otp1'] = otp1
     data['otp2'] = otp2
+    print(otp1)
     msg = ""
     if not data['username'] or not data['name'] or not data['password'] or not data['number'] or not data['email']:
         msg = {"status": {"type": "failure", "message": "missing data"}}
@@ -73,13 +77,6 @@ def verify():
     if User.query.filter_by(number=data['number']).count() == 1:
         msg = {"status": {"type": "failure", "message": "number already taken"}}
         return jsonify(msg)
-
-
-    # Your Account Sid and Auth Token from twilio.com/console
-    # and set the environment variables. See http://twil.io/secure
-    # account_sid = os.environ['AC80945ac6290616dbe73ccabec15aa7f7']
-    # auth_token = os.environ['ce78106ac13db1ff0bfa6cd3fa26a2aa']
-    client = Client('AC80945ac6290616dbe73ccabec15aa7f7', 'ce78106ac13db1ff0bfa6cd3fa26a2aa')
 
     # # mention url 
     # url = "https://www.fast2sms.com/dev/bulk"
@@ -117,13 +114,21 @@ def verify():
     
     # # print the send message 
     # print(returned_msg['message'])
-    sg = sendgrid.SendGridAPIClient(api_key='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')
-    from_email = Email("xyz.noreply.xyz@gmail.com")
-    to_email = To(data['email'])
-    subject = "OTP verification for xyz"
-    content = Content("text/plain","Your OTP is "+str(otp2))
-    mail = Mail(from_email, to_email, subject, content)
-    response = sg.client.mail.send.post(request_body=mail.get())
+
+    with smtplib.SMTP('smtp.gmail.com',587) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
+
+        smtp.login('xyz.noreply.xyz@gmail.com','xyz123456789xyz')
+        
+        subject="OTP verification for xyz"
+        body="Your otp is- " + str(otp2) 
+
+        msg=f'Subject: {subject}\n\n{body}'
+
+        smtp.sendmail('xyz.noreply.xyz@gmail.com', data['email'], msg)
+
     msg ={"status": {"type": "success"}}
     return jsonify(msg)
 
@@ -132,14 +137,14 @@ def register():
     request_data = request.data
     request_data = json.loads(request_data.decode('utf-8'))
     msg = ""
-    otp1 = request_data['otp1']
-    otp2 = request_data['otp2']
-    if otp1 != data['otp1']:
+    otp1req = request_data['otp1']
+    otp2req = request_data['otp2']
+    if str(otp1) != str(otp1req):
+        print(otp1)
+        print(otp1req)
         msg = {"status": {"type": "failure", "message": "OTP for mobile does not match"}}
-        return jsonify(msg)
-    elif otp2 != data['otp2']:
+    elif str(otp2) != str(otp2req):
         msg = {"status": {"type": "failure", "message": "OTP for email does not match"}}
-        return jsonify(msg)
     else:
         u = User()
         u.username = data['username']
@@ -154,4 +159,4 @@ def register():
         data.clear()
 
         msg = {"status": '{"type": "success", "message": "You have registered"}'}
-        return jsonify(msg)
+    return jsonify(msg)
