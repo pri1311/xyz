@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Homepage.id,
+      initialRoute: WelcomeScreen.id,
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/register':

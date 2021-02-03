@@ -20,7 +20,7 @@ class _RegisterationState extends State<Registeration> {
   String name;
   String username;
   String password, confirm_pass, email, otp1, otp2;
-  int number;
+  String number;
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
@@ -193,9 +193,9 @@ class _RegisterationState extends State<Registeration> {
                   title: 'Sign Up',
                   onPressed: () async {
                     _savingData();
-                    final url = 'http://10.0.2.2:8000/verify';
+                    final url = 'http://10.0.2.2:5000/verify';
                     final response =
-                        await http.post('http://10.0.2.2:8000/verify',
+                        await http.post('http://10.0.2.2:5000/verify',
                             body: json.encode({
                               'fullname': name,
                               'username': username,
@@ -203,15 +203,12 @@ class _RegisterationState extends State<Registeration> {
                               'number': number,
                               'password': password,
                             }));
-                    //print(response.body);
+                    print(response.body);
                     final decoded =
                         json.decode(response.body) as Map<String, dynamic>;
-                    //print(decoded);
-                    final status =
-                        json.decode(decoded['status']) as Map<String, dynamic>;
-                    //print(status);
+                    print(decoded);
                     setState(() {
-                      if (status['type'] == 'success') {
+                      if (decoded['status']['type'] == 'success') {
                         Alert(
                             context: context,
                             title: "verify",
@@ -240,13 +237,12 @@ class _RegisterationState extends State<Registeration> {
                             buttons: [
                               DialogButton(
                                 onPressed: () async {
-                                  final url = 'http://10.0.2.2:8000/register';
+                                  final url = 'http://10.0.2.2:5000/register';
                                   final response = await http.post(
-                                      'http://10.0.2.2:8000/register',
+                                      'http://10.0.2.2:5000/register',
                                       body: json.encode({
                                         'otp1': otp1,
-                                        'otp2':otp2,
-
+                                        'otp2': otp2,
                                       }));
                                   final decoded = json.decode(response.body)
                                       as Map<String, dynamic>;
@@ -255,8 +251,11 @@ class _RegisterationState extends State<Registeration> {
                                       as Map<String, dynamic>;
                                   setState(() {
                                     if (status['type'] == 'success') {
-                                      Navigator.pushNamed(
-                                          context, channelList.id);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Homepage(),
+                                          ));
                                     } else {
                                       Alert(
                                         context: context,
@@ -309,10 +308,13 @@ class _RegisterationState extends State<Registeration> {
                     });
                   },
                 ),
-                RoundedButton(colour: Color(0xFFE47070), title: "I am already a member",onPressed: (){
-                  Navigator.pushNamed(context, LoginPage.id);
-                },),
-
+                RoundedButton(
+                  colour: Color(0xFFE47070),
+                  title: "I am already a member",
+                  onPressed: () {
+                    Navigator.pushNamed(context, LoginPage.id);
+                  },
+                ),
               ],
             ),
           ),
