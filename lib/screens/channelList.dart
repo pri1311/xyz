@@ -1,5 +1,4 @@
-import 'dart:html';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
@@ -7,7 +6,7 @@ import 'package:xyz/screens/channelPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:xyz/screens/homepage.dart';
 import 'package:xyz/screens/widgets.dart';
-import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
 class channelList extends StatefulWidget {
@@ -53,6 +52,16 @@ class _channelListState extends State<channelList> {
       ],
     }
   ];
+  SharedPreferences logindata;
+  String username;
+  @override
+  void initState() async {
+    super.initState();
+    initial();
+    final url = 'http://10.0.2.2:5000/getWorkspace';
+    final response = await http.get(url);
+    print(response);
+  }
 
   bool isNameValid = false;
   String workspace_name;
@@ -73,12 +82,11 @@ class _channelListState extends State<channelList> {
     return true;
   }
 
-  @override
-  void initState() async {
-    super.initState();
-    final url = 'http://10.0.2.2:5000/getWorkspace';
-    final response = await http.get(url);
-    print(response);
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      username = logindata.getString('username');
+    });
   }
 
   @override

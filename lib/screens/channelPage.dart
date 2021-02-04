@@ -5,7 +5,7 @@ import 'package:xyz/screens/homepage.dart';
 import 'package:xyz/screens/widgets.dart';
 
 class ChannelScreen extends StatefulWidget {
-  ChannelScreen({Key? key}) : super(key: key);
+  ChannelScreen({key}) : super(key: key);
 
   @override
   _ChannelScreenState createState() => _ChannelScreenState();
