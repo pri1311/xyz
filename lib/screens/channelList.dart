@@ -247,23 +247,26 @@ class _channelListState extends State<channelList> {
                                                   color: Color(0xFFEF7070),
                                                   onPressed: () async {
                                                     _savingData();
-                                                    final url =
-                                                        'http://10.0.2.2:5000/createWorkspace';
                                                     final response =
                                                         await http.post(
-                                                            'http://10.0.2.2:5000/verify',
+                                                            'http://10.0.2.2:5000/createWorkspace',
                                                             body: json.encode({
                                                               'name':
                                                                   workspace_name,
                                                               'admin_username':
                                                                   admin_name_w,
                                                             }));
+
                                                     final decoded = json.decode(
                                                             response.body)
                                                         as Map<String, dynamic>;
+                                                    print(decoded);
+                                                    final status = json.decode(
+                                                            decoded['status'])
+                                                        as Map<String, dynamic>;
+                                                    print(status);
                                                     setState(() {
-                                                      if (decoded['status']
-                                                              ['type'] ==
+                                                      if (status['type'] ==
                                                           'success') {
                                                         Navigator.push(
                                                             context,
