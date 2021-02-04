@@ -24,6 +24,9 @@ def login():
     username = request_data['username']
     password = request_data['password']
 
+    print(username)
+    print(password)
+
     msg = ""
     if not username or not password:
         msg = {"status": {"type": "failure", "message": "Missing Data"}}
@@ -160,3 +163,43 @@ def register():
 
         msg = {"status": '{"type": "success", "message": "You have registered"}'}
     return jsonify(msg)
+
+
+@app.route('/createWorkspace', methods=['POST'])
+def createWorkspace():
+
+    request_data = request.data
+    request_data = json.loads(request_data.decode('utf-8'))
+
+    msg = ""
+
+    name = request_data['name']
+    admin_username = request_data['admin_username']
+
+    if Workspace.query.filter_by(name=name).count() == 1:
+        msg = {"status": {"type": "failure", "message": "Workspace name already taken! Select a new name."}}
+    else:
+        w = Workspace()
+        w.name = name
+        w.admin_username = admin_username
+
+
+        db.session.add(w)
+        db.session.commit()
+        data.clear()
+
+        msg = {"status": '{"type": "success", "message": "New Workspace created"}'}
+    return jsonify(msg)
+
+@app.route('/getWorkspace', methods=['GET'])
+def getWorkspace():
+    workspaces = Workspace.query.all()
+    print(workspaces)
+    names=[]
+    for workspace in workspaces:
+        id = workspace.id
+        name = workspace.name
+        names.append({"id": id, "name":name})
+    return {
+        "w": names
+    }
