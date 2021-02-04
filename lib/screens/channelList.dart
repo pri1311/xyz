@@ -55,12 +55,10 @@ class _channelListState extends State<channelList> {
   SharedPreferences logindata;
   String username;
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     initial();
-    final url = 'http://10.0.2.2:5000/getWorkspace';
-    final response = await http.get(url);
-    print(response);
+    getWorkspace();
   }
 
   bool isNameValid = false;
@@ -68,6 +66,7 @@ class _channelListState extends State<channelList> {
   String admin_name_w;
   String channel_name;
   String admin_name_c;
+  int length = 0;
 
   bool validateTextField(String userInput) {
     if (userInput.isEmpty) {
@@ -86,6 +85,20 @@ class _channelListState extends State<channelList> {
     logindata = await SharedPreferences.getInstance();
     setState(() {
       username = logindata.getString('username');
+    });
+  }
+
+  void getWorkspace() async {
+    final url = 'http://10.0.2.2:5000/getWorkspace';
+    final response = await http.get(url);
+    //print(response.body);
+    final decoded = json.decode(response.body) as Map<String, dynamic>;
+    //print(decoded);
+    setState(() {
+      var workspaces = decoded['w'];
+      length = workspaces.length;
+      print(length);
+      //print(workspaces);
     });
   }
 
@@ -120,13 +133,8 @@ class _channelListState extends State<channelList> {
                     ),
                   ),
                   child: Expanded(
-                    child: ListView(
+                    child: Column(
                       children: [
-                        Workspacebuttons(
-                          location: 'assets/images/dp1.png',
-                        ),
-                        Workspacebuttons(),
-                        Workspacebuttons(),
                         Container(
                           height: 60,
                           margin: EdgeInsets.only(top: 20),
@@ -286,6 +294,17 @@ class _channelListState extends State<channelList> {
                               color: Colors.white.withOpacity(0.6),
                               size: 30,
                             ),
+                          ),
+                        ),
+                        Flexible(
+                          child: ListView.separated(
+                            itemCount: length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Workspacebuttons();
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(),
                           ),
                         ),
                       ],
