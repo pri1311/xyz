@@ -70,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 50.0,
                 ),
                 Form(
+                  key: _form,
                   child: Column(
                     children: <Widget>[
                       Padding(

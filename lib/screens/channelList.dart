@@ -1,8 +1,13 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:xyz/screens/channelPage.dart';
+import 'package:http/http.dart' as http;
+import 'package:xyz/screens/homepage.dart';
 import 'package:xyz/screens/widgets.dart';
+import 'dart:convert';
 
 // ignore: camel_case_types
 class channelList extends StatefulWidget {
@@ -13,6 +18,16 @@ class channelList extends StatefulWidget {
 
 // ignore: camel_case_types
 class _channelListState extends State<channelList> {
+  final GlobalKey<FormState> _form = GlobalKey<FormState>();
+
+  Future<void> _savingData() async {
+    final validation = _form.currentState.validate();
+    if (!validation) {
+      return;
+    }
+    _form.currentState.save();
+  }
+
   List<String> availableChannels = [
     "general",
     "channel",
@@ -38,6 +53,33 @@ class _channelListState extends State<channelList> {
       ],
     }
   ];
+
+  bool isNameValid = false;
+  String workspace_name;
+  String admin_name_w;
+  String channel_name;
+  String admin_name_c;
+
+  bool validateTextField(String userInput) {
+    if (userInput.isEmpty) {
+      setState(() {
+        isNameValid = true;
+      });
+      return false;
+    }
+    setState(() {
+      isNameValid = false;
+    });
+    return true;
+  }
+
+  @override
+  void initState() async {
+    super.initState();
+    final url = 'http://10.0.2.2:5000/getWorkspace';
+    final response = await http.get(url);
+    print(response);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,83 +149,125 @@ class _channelListState extends State<channelList> {
                                         padding:
                                             MediaQuery.of(context).viewInsets,
                                         child: Container(
-                                            child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            TextField(
-                                              autofocus: true,
-                                              decoration: InputDecoration(
-                                                hintText: "Name of workspace",
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Color(0xFF292929),
-                                                  ),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Colors.white
-                                                        .withOpacity(0.7),
-                                                  ),
-                                                ),
-                                                hintStyle: TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.7)),
-                                                fillColor: Color(0xFFFFFFFF),
-                                              ),
-                                              style: TextStyle(
-                                                color: Colors.white
-                                                    .withOpacity(0.7),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 30,
-                                            ),
-                                            TextField(
-                                              decoration: InputDecoration(
-                                                hintText: "Admin username",
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Color(0xFF292929),
-                                                  ),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Colors.white
-                                                        .withOpacity(0.7),
-                                                  ),
-                                                ),
-                                                hintStyle: TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.7)),
-                                                fillColor: Color(0xFFFFFFFF),
-                                              ),
-                                              style: TextStyle(
-                                                color: Colors.white
-                                                    .withOpacity(0.7),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(20.0),
-                                              child: RaisedButton(
-                                                elevation: 6,
-                                                focusElevation: 2,
-                                                color: Color(0xFFEF7070),
-                                                onPressed: () {
-                                                  print('button pressed!');
+                                            child: Form(
+                                          key: _form,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              TextField(
+                                                onChanged: (String value) {
+                                                  workspace_name = value;
                                                 },
-                                                child: const Text(
-                                                  'Create Workspace',
-                                                  style:
-                                                      TextStyle(fontSize: 20),
+                                                autofocus: true,
+                                                decoration: InputDecoration(
+                                                  errorText: isNameValid
+                                                      ? 'Workspace name cannot be blank!'
+                                                      : null,
+                                                  hintText: "Name of workspace",
+                                                  enabledBorder:
+                                                      UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0xFF292929),
+                                                    ),
+                                                  ),
+                                                  focusedBorder:
+                                                      UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Colors.white
+                                                          .withOpacity(0.7),
+                                                    ),
+                                                  ),
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.7)),
+                                                  fillColor: Color(0xFFFFFFFF),
+                                                ),
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.7),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              TextField(
+                                                onChanged: (String value) {
+                                                  admin_name_w = value;
+                                                },
+                                                decoration: InputDecoration(
+                                                  hintText: "Admin username",
+                                                  errorText: isNameValid
+                                                      ? 'Admin name cannot be blank!'
+                                                      : null,
+                                                  enabledBorder:
+                                                      UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Color(0xFF292929),
+                                                    ),
+                                                  ),
+                                                  focusedBorder:
+                                                      UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: Colors.white
+                                                          .withOpacity(0.7),
+                                                    ),
+                                                  ),
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.7)),
+                                                  fillColor: Color(0xFFFFFFFF),
+                                                ),
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.7),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(20.0),
+                                                child: RaisedButton(
+                                                  elevation: 6,
+                                                  focusElevation: 2,
+                                                  color: Color(0xFFEF7070),
+                                                  onPressed: () async {
+                                                    _savingData();
+                                                    final url =
+                                                        'http://10.0.2.2:5000/createWorkspace';
+                                                    final response =
+                                                        await http.post(
+                                                            'http://10.0.2.2:5000/verify',
+                                                            body: json.encode({
+                                                              'name':
+                                                                  workspace_name,
+                                                              'admin_username':
+                                                                  admin_name_w,
+                                                            }));
+                                                    final decoded = json.decode(
+                                                            response.body)
+                                                        as Map<String, dynamic>;
+                                                    setState(() {
+                                                      if (decoded['status']
+                                                              ['type'] ==
+                                                          'success') {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      Homepage(),
+                                                            ));
+                                                      }
+                                                    });
+                                                  },
+                                                  child: const Text(
+                                                    'Create Workspace',
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ))),
                                   );
                                 },

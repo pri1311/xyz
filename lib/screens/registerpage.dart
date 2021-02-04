@@ -5,7 +5,6 @@ import 'package:xyz/components/textdetails.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:xyz/screens/channelList.dart';
 import 'package:xyz/screens/homepage.dart';
 import 'package:xyz/screens/loginpage.dart';
 

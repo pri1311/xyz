@@ -4,7 +4,7 @@ class Header extends StatelessWidget {
   final String title;
   final double size;
 
-  Header({this.title, this.size = 30.0});
+  Header({this.title = "", this.size = 30.0});
 
   @override
   Widget build(BuildContext context) {
