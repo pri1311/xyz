@@ -8,7 +8,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:xyz/screens/channelList.dart';
+import 'package:xyz/screens/channelPage.dart';
 import 'package:xyz/screens/registerpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_screen';
@@ -19,6 +21,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String password, username;
+  SharedPreferences logindata;
+  bool newuser;
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   //function to validate and save user form
   Future<void> _savingData() async {
@@ -28,7 +32,20 @@ class _LoginPageState extends State<LoginPage> {
     }
     _form.currentState.save();
   }
+  @override
+  void initState() {
 
+    super.initState();
+    check_if_already_login();
+  }
+  void check_if_already_login() async {
+    logindata = await SharedPreferences.getInstance();
+    newuser = (logindata.getBool('login') ?? true);
+    print(newuser);
+    if (newuser == false) {
+      Navigator.pushNamed(context, channelList.id);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -137,6 +154,8 @@ class _LoginPageState extends State<LoginPage> {
                         json.decode(response.body) as Map<String, dynamic>;
                     setState(() {
                       if (decoded['status']['type'] == 'success') {
+                        logindata.setBool('login', false);
+                        logindata.setString('username', username);
                         Navigator.pushNamed(context, channelList.id);
                       } else {
                         Alert(

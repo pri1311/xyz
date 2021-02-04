@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:xyz/screens/channelPage.dart';
 import 'package:xyz/screens/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
 class channelList extends StatefulWidget {
@@ -38,7 +39,21 @@ class _channelListState extends State<channelList> {
       ],
     }
   ];
+  SharedPreferences logindata;
+  String username;
+  @override
+  void initState() {
 
+    super.initState();
+    initial();
+  }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      username = logindata.getString('username');
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
