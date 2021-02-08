@@ -321,4 +321,11 @@ class _RegisterationState extends State<Registeration> {
       ),
     );
   }
+  @override
+  void dispose() {
+    _pass.dispose();
+    _confirmPass.dispose();
+    super.dispose();
+  }
 }
+

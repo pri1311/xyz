@@ -9,11 +9,13 @@ import 'dart:convert';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:xyz/screens/channelList.dart';
 import 'package:xyz/screens/channelPage.dart';
+import 'package:xyz/screens/forgotpassword.dart';
 import 'package:xyz/screens/registerpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_screen';
+
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -23,6 +25,8 @@ class _LoginPageState extends State<LoginPage> {
   String password, username;
   SharedPreferences logindata;
   bool newuser;
+  int otp;
+  final TextEditingController _otp = TextEditingController();
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   //function to validate and save user form
   Future<void> _savingData() async {
@@ -127,6 +131,63 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: EdgeInsets.only(top: 20.0, bottom: 5.0),
                   child: GestureDetector(
+                    onTap: () async {
+                      _savingData();
+                      final url = 'http://10.0.2.2:5000/forgotpassword';
+                      final response = await http.post(
+                          url,
+                          body: json.encode(
+                              {'username': username, 'password': password}));
+                      final decoded =
+                      json.decode(response.body) as Map<String, dynamic>;
+                      setState(() {
+                        if(decoded['status']['type'] == 'success')
+                          {
+                            Alert(
+                                context: context,
+                                title: "verify",
+                                content: Column(
+                                  children: <Widget>[
+                                    TextFormField(
+                                      controller:_otp,
+                                      decoration: InputDecoration(
+                                        icon: Icon(Icons.email),
+                                        labelText: 'OTP for email',
+                                      ),
+                                      onSaved: (value) {
+                                        otp = int.parse(value);
+                                      },
+                                      validator: (value){
+                                        if(int.parse(value)!=decoded['status']['message']){
+                                          return "Please enter a valid otp";
+                                        }
+                                        return null;
+                                      },
+
+                                    ),
+                                  ],
+                                ),
+                                buttons: [
+                                  DialogButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ForgotPassword(),
+                                            ));
+                                      });
+                                    },
+                                    child: Text(
+                                      "verify",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                  )
+                                ]).show();
+                          }
+                      });
+                    },
                     child: Text(
                       'Forgot your Password',
                       textAlign: TextAlign.right,
