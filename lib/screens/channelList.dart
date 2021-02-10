@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
@@ -33,32 +34,16 @@ class _channelListState extends State<channelList> {
     "some other channel",
   ];
 
-  var workspaces = [
-    {
-      'id': 1,
-      'name': "Workspace1",
-      'channels': [
-        "general",
-        "channel",
-        "some other channel",
-      ],
-    },
-    {
-      'id': 2,
-      'name': "Workspace2",
-      'channels': [
-        "general",
-        "channel",
-      ],
-    }
-  ];
+  var workspaces = [];
   SharedPreferences logindata;
   String username;
+
   @override
   void initState() {
     super.initState();
     initial();
     getWorkspace();
+    getChannels();
   }
 
   bool isNameValid = false;
@@ -67,6 +52,7 @@ class _channelListState extends State<channelList> {
   String channel_name;
   String admin_name_c;
   int length = 0;
+  var wid;
 
   bool validateTextField(String userInput) {
     if (userInput.isEmpty) {
@@ -88,6 +74,8 @@ class _channelListState extends State<channelList> {
     });
   }
 
+  var channels = [];
+
   void getWorkspace() async {
     final url = 'http://10.0.2.2:5000/getWorkspace';
     final response = await http.get(url);
@@ -98,7 +86,23 @@ class _channelListState extends State<channelList> {
       var workspaces = decoded['w'];
       length = workspaces.length;
       print(length);
+      wid = workspaces[0]['id'];
+      print(wid);
       //print(workspaces);
+    });
+  }
+
+  void getChannels() async {
+    final url = 'http://10.0.2.2:5000/getChannels/${wid}';
+    final response = await http.get(url);
+    final decoded = json.decode(response.body) as Map<String, dynamic>;
+    setState(() {
+      var channels = decoded['c'];
+      length = channels.length;
+      print(length);
+      print(wid);
+      print(url);
+      print(channels);
     });
   }
 
@@ -489,48 +493,57 @@ class _channelListState extends State<channelList> {
                       SizedBox(
                         height: 10,
                       ),
-                      Expanded(
-                        child: ListView.separated(
-                          padding: const EdgeInsets.all(8.0),
-                          itemCount: availableChannels.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        duration: Duration(milliseconds: 500),
-                                        type: PageTransitionType.leftToRight,
-                                        child: ChannelScreen()));
-                              },
-                              child: Material(
-                                color: Color(0xFF121212).withOpacity(0.70),
-                                //borderRadius: BorderRadius.circular(10.0),
-                                shadowColor: Color(0xFF121212),
-                                elevation: 15,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1.0,
-                                      color: const Color(0xFF121212),
+                      wid != null
+                          ? Expanded(
+                              child: ListView.separated(
+                                padding: const EdgeInsets.all(8.0),
+                                itemCount: channels.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              duration:
+                                                  Duration(milliseconds: 500),
+                                              type: PageTransitionType
+                                                  .leftToRight,
+                                              child: ChannelScreen()));
+                                    },
+                                    child: Material(
+                                      color:
+                                          Color(0xFF121212).withOpacity(0.70),
+                                      //borderRadius: BorderRadius.circular(10.0),
+                                      shadowColor: Color(0xFF121212),
+                                      elevation: 15,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 1.0,
+                                            color: const Color(0xFF121212),
+                                          ),
+                                        ),
+                                        padding: EdgeInsets.all(10.0),
+                                        child: Text(
+                                          '# ${channels[index]['name']}',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color:
+                                                Colors.white.withOpacity(0.60),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Text(
-                                    '# ${availableChannels[index]}',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.white.withOpacity(0.60),
-                                    ),
-                                  ),
-                                ),
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) =>
+                                        const Divider(),
                               ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
-                        ),
-                      ),
+                            )
+                          : SizedBox(
+                              height: 0,
+                            )
                     ],
                   ),
                 ),
