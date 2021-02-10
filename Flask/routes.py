@@ -3,11 +3,7 @@ from app import app, db
 from models import *
 import json
 import os
-from twilio.rest import Client
 import random
-import sendgrid
-from sendgrid.helpers.mail import *
-import requests 
 import smtplib
 
 
@@ -24,8 +20,7 @@ def login():
     username = request_data['username']
     password = request_data['password']
 
-    print(username)
-    print(password)
+
 
     msg = ""
     if not username or not password:
@@ -33,8 +28,7 @@ def login():
         return jsonify(msg)
 
     user = User.query.filter_by(username=username).first()
-    print(User.query.filter_by(username=username).first())
-    print(user)
+
     if user is None or not user.check_password(password):
         msg = {"status": {"type": "failure", "message": "Username or password incorrect"}}
     else:
@@ -118,22 +112,45 @@ def verify():
     # # print the send message 
     # print(returned_msg['message'])
 
-    with smtplib.SMTP('smtp.gmail.com',587) as smtp:
-        smtp.ehlo()
-        smtp.starttls()
-        smtp.ehlo()
-
-        smtp.login('xyz.noreply.xyz@gmail.com','xyz123456789xyz')
-        
-        subject="OTP verification for xyz"
-        body="Your otp is- " + str(otp2) 
-
-        msg=f'Subject: {subject}\n\n{body}'
-
-        smtp.sendmail('xyz.noreply.xyz@gmail.com', data['email'], msg)
+    sendEmail(data['email'],otp2)
 
     msg ={"status": {"type": "success"}}
     return jsonify(msg)
+verify={}
+@app.route('/forgotpassword',methods=['POST'])
+def forgotpassword():
+    request_data = request.data
+    request_data = json.loads(request_data.decode('utf-8'))
+    username = request_data['username']
+    msg=""
+    verify['username'] = username
+    user = User.query().filter_by(username=username).first()
+    email = user.email
+    if email is not None:
+        otp2 = random.randint(100000, 999999)
+        verify['otp'] = otp2
+        verify['username'] = username
+        sendEmail(email,otp2)
+        msg={"status": {"type": "success","message":otp2}}
+        return jsonify(msg)
+    msg = {"status": {"type": "failure", "message": -1}}
+    return jsonify(msg)
+
+
+@app.route('/fp_verify',methods=['POST'])
+def forgotpassword_verify():
+    request_data = request.data
+    request_data = json.loads(request_data.decode('utf-8'))
+    msg = ""
+    password = request_data['password']
+    username = verify['username']
+    user = User.query().filter_by(username=username).first()
+    user.set_password(password)
+    db.session.commit()
+    msg={"status": '{"type": "success", "message": "password changed successfully"}'}
+    return jsonify(msg)
+
+
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -143,8 +160,7 @@ def register():
     otp1req = request_data['otp1']
     otp2req = request_data['otp2']
     if str(otp1) != str(otp1req):
-        print(otp1)
-        print(otp1req)
+
         msg = {"status": {"type": "failure", "message": "OTP for mobile does not match"}}
     elif str(otp2) != str(otp2req):
         msg = {"status": {"type": "failure", "message": "OTP for email does not match"}}
@@ -194,7 +210,7 @@ def createWorkspace():
 @app.route('/getWorkspace', methods=['GET'])
 def getWorkspace():
     workspaces = Workspace.query.all()
-    print(workspaces)
+
     names=[]
     for workspace in workspaces:
         id = workspace.id
@@ -202,4 +218,19 @@ def getWorkspace():
         names.append({"id": id, "name":name})
     return {
         "w": names
-    }
+   }
+
+def sendEmail(self,email,otp2):
+    with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
+
+        smtp.login('xyz.noreply.xyz@gmail.com', 'xyz123456789xyz')
+
+        subject = "OTP verification for xyz"
+        body = "Your otp is- " + str(otp2)
+
+        msg = f'Subject: {subject}\n\n{body}'
+
+        smtp.sendmail('xyz.noreply.xyz@gmail.com', email, msg)
