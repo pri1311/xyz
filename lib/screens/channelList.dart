@@ -34,7 +34,8 @@ class _channelListState extends State<channelList> {
     "some other channel",
   ];
 
-  var workspaces = [];
+  List<dynamic> workspaces;
+  List<dynamic> channels;
   SharedPreferences logindata;
   String username;
 
@@ -43,7 +44,7 @@ class _channelListState extends State<channelList> {
     super.initState();
     initial();
     getWorkspace();
-    getChannels();
+    // getChannels();
   }
 
   bool isNameValid = false;
@@ -51,8 +52,9 @@ class _channelListState extends State<channelList> {
   String admin_name_w;
   String channel_name;
   String admin_name_c;
-  int length = 0;
-  var wid;
+  int length;
+  int lengthc;
+  int wid;
 
   bool validateTextField(String userInput) {
     if (userInput.isEmpty) {
@@ -74,8 +76,6 @@ class _channelListState extends State<channelList> {
     });
   }
 
-  var channels = [];
-
   void getWorkspace() async {
     final url = 'http://10.0.2.2:5000/getWorkspace';
     final response = await http.get(url);
@@ -83,25 +83,25 @@ class _channelListState extends State<channelList> {
     final decoded = json.decode(response.body) as Map<String, dynamic>;
     //print(decoded);
     setState(() {
-      var workspaces = decoded['w'];
+      workspaces = decoded['w'];
+      wid = workspaces[0]['id'];
       length = workspaces.length;
       print(length);
-      wid = workspaces[0]['id'];
       print(wid);
-      //print(workspaces);
+      print(workspaces);
+      getChannels();
     });
   }
 
   void getChannels() async {
+    print("wid");
+    print(wid);
     final url = 'http://10.0.2.2:5000/getChannels/${wid}';
     final response = await http.get(url);
     final decoded = json.decode(response.body) as Map<String, dynamic>;
     setState(() {
-      var channels = decoded['c'];
-      length = channels.length;
-      print(length);
-      print(wid);
-      print(url);
+      channels = decoded['c'];
+      lengthc = channels.length;
       print(channels);
     });
   }
@@ -381,8 +381,14 @@ class _channelListState extends State<channelList> {
                                               //MainAxisSize.min,
                                               children: <Widget>[
                                                 TextField(
+                                                  onChanged: (String value) {
+                                                    channel_name = value;
+                                                  },
                                                   autofocus: true,
                                                   decoration: InputDecoration(
+                                                    errorText: isNameValid
+                                                        ? 'Channel name cannot be blank!'
+                                                        : null,
                                                     hintText: "Name of channel",
                                                     enabledBorder:
                                                         UnderlineInputBorder(
@@ -413,8 +419,14 @@ class _channelListState extends State<channelList> {
                                                   height: 30,
                                                 ),
                                                 TextField(
+                                                  onChanged: (String value) {
+                                                    admin_name_c = value;
+                                                  },
                                                   decoration: InputDecoration(
                                                     hintText: "Admin username",
+                                                    errorText: isNameValid
+                                                        ? 'Admin name cannot be blank!'
+                                                        : null,
                                                     enabledBorder:
                                                         UnderlineInputBorder(
                                                       borderSide: BorderSide(
@@ -447,8 +459,43 @@ class _channelListState extends State<channelList> {
                                                     elevation: 6,
                                                     focusElevation: 2,
                                                     color: Color(0xFFEF7070),
-                                                    onPressed: () {
-                                                      print('button pressed!');
+                                                    onPressed: () async {
+                                                      _savingData();
+                                                      final response =
+                                                          await http.post(
+                                                              'http://10.0.2.2:5000/createChannel',
+                                                              body:
+                                                                  json.encode({
+                                                                'name':
+                                                                    channel_name,
+                                                                'admin_username':
+                                                                    admin_name_c,
+                                                                'wid': wid,
+                                                              }));
+
+                                                      final decoded =
+                                                          json.decode(
+                                                                  response.body)
+                                                              as Map<String,
+                                                                  dynamic>;
+                                                      print(decoded);
+                                                      final status = json
+                                                          .decode(decoded[
+                                                              'status']) as Map<
+                                                          String, dynamic>;
+                                                      print(status);
+                                                      setState(() {
+                                                        if (status['type'] ==
+                                                            'success') {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        Homepage(),
+                                                              ));
+                                                        }
+                                                      });
                                                     },
                                                     child: const Text(
                                                       'Create Channel',
@@ -493,57 +540,48 @@ class _channelListState extends State<channelList> {
                       SizedBox(
                         height: 10,
                       ),
-                      wid != null
-                          ? Expanded(
-                              child: ListView.separated(
-                                padding: const EdgeInsets.all(8.0),
-                                itemCount: channels.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              type: PageTransitionType
-                                                  .leftToRight,
-                                              child: ChannelScreen()));
-                                    },
-                                    child: Material(
-                                      color:
-                                          Color(0xFF121212).withOpacity(0.70),
-                                      //borderRadius: BorderRadius.circular(10.0),
-                                      shadowColor: Color(0xFF121212),
-                                      elevation: 15,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            width: 1.0,
-                                            color: const Color(0xFF121212),
-                                          ),
-                                        ),
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Text(
-                                          '# ${channels[index]['name']}',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            color:
-                                                Colors.white.withOpacity(0.60),
-                                          ),
-                                        ),
-                                      ),
+                      Expanded(
+                        child: ListView.separated(
+                          padding: const EdgeInsets.all(8.0),
+                          itemCount: lengthc,
+                          itemBuilder: (BuildContext context, int index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        duration: Duration(milliseconds: 500),
+                                        type: PageTransitionType.leftToRight,
+                                        child: ChannelScreen()));
+                              },
+                              child: Material(
+                                color: Color(0xFF121212).withOpacity(0.70),
+                                //borderRadius: BorderRadius.circular(10.0),
+                                shadowColor: Color(0xFF121212),
+                                elevation: 15,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1.0,
+                                      color: const Color(0xFF121212),
                                     ),
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        const Divider(),
+                                  ),
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    '# ${channels[index]['name']}',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.white.withOpacity(0.60),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            )
-                          : SizedBox(
-                              height: 0,
-                            )
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                        ),
+                      )
                     ],
                   ),
                 ),
