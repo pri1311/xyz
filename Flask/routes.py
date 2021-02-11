@@ -234,3 +234,44 @@ def sendEmail(self,email,otp2):
         msg = f'Subject: {subject}\n\n{body}'
 
         smtp.sendmail('xyz.noreply.xyz@gmail.com', email, msg)
+
+@app.route('/createChannel', methods=['POST'])
+def createChannel():
+
+    request_data = request.data
+    request_data = json.loads(request_data.decode('utf-8'))
+
+    msg = ""
+
+    name = request_data['name']
+    admin_username = request_data['admin_username']
+    wid = request_data['wid']
+
+    if Channel.query.filter_by(name=name, wid=wid).count() == 1:
+        msg = {"status": {"type": "failure", "message": "Channel name already taken! Select a new name."}}
+    else:
+        c = Channel()
+        c.name = name
+        c.admin_username = admin_username
+        c.wid = wid
+
+
+        db.session.add(c)
+        db.session.commit()
+        data.clear()
+
+        msg = {"status": '{"type": "success", "message": "New Channel created"}'}
+    return jsonify(msg)
+
+@app.route('/getChannels/<wid>', methods=['GET'])
+def getChannels(wid):
+    channels = Channel.query.filter_by(wid=wid).all()
+
+    names=[]
+    for channel in channels:
+        id = channel.id
+        name = channel.name
+        names.append({"id": id, "name":name})
+    return {
+        "c": names
+   }

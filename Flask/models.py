@@ -31,18 +31,6 @@ class Workspace(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), index=True)
     admin_username = db.Column(db.String(80), index=True)
-    channellist = db.Column(db.String(255), index=True)
-
-    def addChannel(self, newChannel):
-        self.channellist+=(" "+ newChannel)
-
-    def getChannellist(self):
-        channelstring= self.channellist
-        channels=channelstring.split()
-        return{
-            "channellist": channels,
-        }
-
 
     def getJsonData(self):
         return {
@@ -52,3 +40,18 @@ class Workspace(db.Model):
             "channellist": self.channellist,
         }
 
+class Channel(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), index=True)
+    admin_username = db.Column(db.String(80), index=True)
+    wid = db.Column(db.Integer,index = True)
+
+
+    def getJsonData(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "admin_username": self.admin_username,
+            "workspace_id": self.wid,
+        }
