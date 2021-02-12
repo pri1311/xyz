@@ -27,7 +27,7 @@ function global:deactivate ([switch]$NonDestructive) {
 
 deactivate -nondestructive
 
-$env:VIRTUAL_ENV="C:\Users\Jainam Dharod\Downloads\aadhaar-verification-master\venv"
+$env:VIRTUAL_ENV="C:\Users\Jainam Dharod\PycharmProjects\aadhaar-verification-master\venv"
 
 if (! $env:VIRTUAL_ENV_DISABLE_PROMPT) {
     # Set the prompt to include the env name

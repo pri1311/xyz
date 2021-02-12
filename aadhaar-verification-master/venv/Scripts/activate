@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Jainam Dharod\Downloads\aadhaar-verification-master\venv"
+VIRTUAL_ENV="C:\Users\Jainam Dharod\PycharmProjects\aadhaar-verification-master\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
