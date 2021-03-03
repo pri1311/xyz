@@ -6,14 +6,13 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_10.dart';
 
 class Workspacebuttons extends StatelessWidget {
   final String location;
-  Workspacebuttons({this.location});
+  Function workspaceChange;
+  Workspacebuttons({this.workspaceChange, this.location});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print(1);
-      },
+      onTap: workspaceChange,
       child: Container(
         margin: EdgeInsets.only(
           left: 0.0,

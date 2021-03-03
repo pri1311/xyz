@@ -8,17 +8,27 @@ enum _SelectedTab { home, search, profile }
 
 class Homepage extends StatefulWidget {
   static const String id = 'Home_page';
+  int wid;
+  Homepage({this.wid});
   @override
-  _HomepageState createState() => _HomepageState();
+  _HomepageState createState() => _HomepageState(wid: wid);
 }
 
 class _HomepageState extends State<Homepage> {
   var _selectedTab = _SelectedTab.home;
-
+  int wid;
+  _HomepageState({this.wid});
   void _handleIndexChanged(int i) {
     setState(() {
       _selectedTab = _SelectedTab.values[i];
+      ;
     });
+  }
+
+  @override
+  void initState() {
+    print("from homepage");
+    print(wid);
   }
 
   List<String> availableChannels = [
@@ -33,9 +43,13 @@ class _HomepageState extends State<Homepage> {
       child: Column(
         children: [
           _selectedTab == _SelectedTab.home
-              ? Expanded(
-                  child: channelList(),
-                )
+              ? (wid == null)
+                  ? Expanded(
+                      child: channelList(wid: -1),
+                    )
+                  : Expanded(
+                      child: channelList(wid: wid),
+                    )
               : _selectedTab == _SelectedTab.profile
                   ? Expanded(
                       child: ProfileScreen(_handleIndexChanged),

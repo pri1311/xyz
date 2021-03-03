@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
@@ -9,16 +8,22 @@ import 'package:xyz/screens/homepage.dart';
 import 'package:xyz/screens/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'homepage.dart';
+
 // ignore: camel_case_types
 class channelList extends StatefulWidget {
   static const String id = 'channel_list';
+  int wid;
+  channelList({@required this.wid});
   @override
-  _channelListState createState() => _channelListState();
+  _channelListState createState() => _channelListState(wid: wid);
 }
 
 // ignore: camel_case_types
 class _channelListState extends State<channelList> {
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
+  int wid;
+  _channelListState({@required this.wid});
 
   Future<void> _savingData() async {
     final validation = _form.currentState.validate();
@@ -41,6 +46,7 @@ class _channelListState extends State<channelList> {
 
   @override
   void initState() {
+    print(wid);
     super.initState();
     initial();
     getWorkspace();
@@ -54,7 +60,6 @@ class _channelListState extends State<channelList> {
   String admin_name_c;
   int length;
   int lengthc;
-  int wid;
 
   bool validateTextField(String userInput) {
     if (userInput.isEmpty) {
@@ -84,7 +89,10 @@ class _channelListState extends State<channelList> {
     //print(decoded);
     setState(() {
       workspaces = decoded['w'];
-      wid = workspaces[0]['id'];
+      if (wid == -1 || wid == null) {
+        print("wid is null");
+        wid = workspaces[0]['id'];
+      }
       length = workspaces.length;
       print(length);
       print(wid);
@@ -94,8 +102,6 @@ class _channelListState extends State<channelList> {
   }
 
   void getChannels() async {
-    print("wid");
-    print(wid);
     final url = 'http://10.0.2.2:5000/getChannels/${wid}';
     final response = await http.get(url);
     final decoded = json.decode(response.body) as Map<String, dynamic>;
@@ -103,6 +109,21 @@ class _channelListState extends State<channelList> {
       channels = decoded['c'];
       lengthc = channels.length;
       print(channels);
+    });
+  }
+
+  void workspaceChange() {
+    setState(() {
+      print("workspace change clicked");
+      wid = 2;
+      print(wid);
+      Navigator.pop(context);
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.rotate,
+              duration: Duration(seconds: 1),
+              child: Homepage(wid: wid)));
     });
   }
 
@@ -307,7 +328,8 @@ class _channelListState extends State<channelList> {
                           child: ListView.separated(
                             itemCount: length,
                             itemBuilder: (BuildContext context, int index) {
-                              return Workspacebuttons();
+                              return Workspacebuttons(
+                                  workspaceChange: workspaceChange);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) =>
