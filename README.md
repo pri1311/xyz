@@ -1,20 +1,15 @@
-<<<<<<< HEAD
 # xyz
 
 A new Flutter application.
 
-## Getting Started
+## Onboarding Screens
+<img src="https://github.com/pri1311/xyz/blob/master/screenshots/Screenshot_1616347273.png"/><img src= "https://github.com/pri1311/xyz/blob/master/screenshots/Screenshot_1616347283.png"/>
 
-This project is a starting point for a Flutter application.
+## Authentication Screens
+<img src="https://github.com/pri1311/xyz/blob/master/screenshots/WhatsApp%20Image%202021-03-21%20at%2023.01.24.jpeg"/><img src= "https://github.com/pri1311/xyz/blob/master/screenshots/WhatsApp%20Image%202021-03-21%20at%2023.01.25.jpeg"/>
 
-A few resources to get you started if this is your first Flutter project:
+## HomeScreen
+<img scr="https://github.com/pri1311/xyz/blob/master/screenshots/Screenshot_1616347608.png"/><img src= "https://github.com/pri1311/xyz/blob/master/screenshots/Screenshot_1616347632.png"/>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# xyz
->>>>>>> 5cb59fac8c74529a0d16b5bb20d7311e3eb2c4df
+## User Profile Screen
+<img src="https://github.com/pri1311/xyz/blob/master/screenshots/Screenshot_1616347616.png"/>
